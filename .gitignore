@@ -1,3 +1,9 @@
 *.swp
 *.o
 *.out
+
+project-review.aux
+project-review.bbl
+project-review.blg
+project-review.dvi
+project-review.log
