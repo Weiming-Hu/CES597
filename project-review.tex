@@ -39,8 +39,8 @@
 \newcommand{\hmwkDueDate}{Monday,\ August\  27,\ 2018}
 \newcommand{\hmwkClass}{Homework 0}
 \newcommand{\hmwkClassTime}{CSE 597}
-\newcommand{\hmwkClassInstructor}{ } \newcommand{\hmwkAuthorNameb}{XYZ\ ZYX.\ YZX}
-\newcommand{\hmwkNames}{XYZ}
+\newcommand{\hmwkClassInstructor}{ } \newcommand{\hmwkAuthorNameb}{Weiming Hu}
+\newcommand{\hmwkNames}{Project Introductions}
 
 % Setup the header and footer
 \pagestyle{fancy}
@@ -67,30 +67,32 @@
 \newpage
 \section{Syllabus Acknowledgement}
 
-By turning in this assignment, I, XYZ, acknowledge that I have received and understand the course syllabus information available on \url{sites.psu.edu/psucse597fall2018}. 
+By turning in this assignment, I, Weiming Hu, acknowledge that I have received and understand the course syllabus information available on \url{sites.psu.edu/psucse597fall2018}. 
 
 \section{Introduction}
 
-My name is XYZ.  I am a XYZ year master/phD student in the XYZ department. My programming experience includes XYZ-languages and XYZ-parallelization-methods.  When I compute, I typically use XYZ-clusters.  My research is all/mostly/some/not computational in nature. 
+My name is Weiming Hu. I am a third year Ph.D. student in the Department of Geography. My programming experience includes C/C++ and R. I use OpenMP (multithreading) and OpenMPI (multi-processes) for parallelization methods. When I compute, I typically use Cheyenne supercomputers from National Center of Atmospheric Research and the ICS clusters from Penn State. My research is mostly computational in nature.
 
-My area of interest is XYZ. Good general references in my field are \citet{wilcox2000basic} and \citet{kreyszig2010advanced}.  Good computational references in my field are \citet{anderson1995computational} and \citet{wilcox1998turbulence}. 
-
+My area of interest lies in Numerical Weather Prediction. Good general references in my field are \citet{delle2013probabilistic}, \citet{alessandrini2015analog}, and \citet{alessandrini2015novel}. Good computational references in my field are \citet{junk2015predictor} and \citet{cervone2017short}.
 
 \subsection{Accounts}
 
-I have gotten an account on ACI using \url{https://ics.psu.edu/?page_id=57}.  My ACI username is XYZ.
+I have gotten an account on ACI. My ACI username is \textbf{wuh20}.
 
-I have gotten an account on XSEDE using \url{https://portal.xsede.org/my-xsede?p_p_id=58&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account}.  My username is XYZ.
+I have gotten an account on XSEDE. My username is \textbf{weiming}.
 
-I will be making my assignments available using XYZ(github/bitbucket/other). My username is XYZ. 
+I will be making my assignments available using GitHub. My username is \textbf{Weiming-Hu}. The repository can be accessed using \url{https://github.com/Weiming-Hu/CES597}.
 
 \subsection{My Course Project}
 
-I am currently thinking about choosing XYZ as my $Ax=b$ problem for the semester project. I believe that this will be a good project because
+I am currently thinking about developing a spatial metric analysis for the Analog Ensemble computation. Analog Ensemble, as a data-driven method to generate probabilistic weather forecasts and uncertainty information, is the core methodology in my research. I am the main developer and maintainer of the C++ implementation and the R interface. The program is currently not publicly accessible, but I plan to generate a license for it and publish the program along with the work and material in this course.
+
+I believe that this will be a good project because:
+
 \begin{itemize}
-  \item reason A
-  \item reason B
-  \item reason ...
+  \item Although the current implementation utilizes OpenMP to optimize computation on a single node, but it is not able to take full advantage of the multi-node infrastructure. Therefore I plan to also integrate OpenMPI into program.
+  \item Analog Ensemble algorithm is per se a computationally intensive task, and also a typical Ax = b problem. The main idea in the algorithm is to compute similarity of different feature vectors and identify the vectors with higher similarity.
+  \item The problem can be easily scaled up in production. For example, generating 24-h temperature forecasts for two months for North America at a 11 km grid scale using two years of historical weather observations and archived forecasts means that the program is dealing with ~80 GB of input data. The scale of the computation largely depends on the spatial and temporal resolution of forecasts.
 \end{itemize}
 
 
@@ -99,7 +101,7 @@ I am currently thinking about choosing XYZ as my $Ax=b$ problem for the semester
 You can get my assignment onto ACI using the command:
 
 \begin{verbatim}
-git clone USERID@aci-b.aci.ics.psu.edu:/storage/work/a/awl5173/toShare/cse597_fall2018/hw0/psu_cse597-002F18_hw0
+git clone wuh20@aci-b.aci.ics.psu.edu:/storage/home/w/wuh20/github/CES597
 \end{verbatim}
 
 * Note, test this with us in class or with another person who isn't in the same group(s) as you.
@@ -119,12 +121,12 @@ make
 
 \textbf{Running the program:}
 \begin{verbatim}
-./awl5173_helloWorld.out
+.\helloWorld.out
 \end{verbatim}
 
 \textbf{Expected output:}
 \begin{verbatim}
-awl5173 says "Hello, World!"
+Weiming says "Hello, World!"
 \end{verbatim}
 
 \subsection{Instructions for compiling the write-up}
@@ -138,7 +140,8 @@ I used ACI to compile the document.  You can do this using the command:
 
 I would like to acknowledge Chris Blanton and Chuck Pavloski for helping formulate the homework material, and Justin Petucci and Rahim Charania for helping to make sure the permissions were set correctly for the git information.
 
-\bibliographystyle{acm}
+% The ACM format does not seem to be working. Therefore I changed it to plainnat.
+\bibliographystyle{plainnat}
 \bibliography{project-review}
 
 \end{spacing}

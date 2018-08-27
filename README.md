@@ -21,8 +21,7 @@ make
 
 # This should output
 
-awl5173 says "Hello world!"
+Weiming says "Hello world!"
 
 # Write-up compilation instructions
 ./pdfmake.sh
-
