@@ -1,4 +1,5 @@
 *.swp
+*.dep.inc
 *.o
 *.out
 
@@ -7,3 +8,7 @@ project-review.bbl
 project-review.blg
 project-review.dvi
 project-review.log
+/linearSolvers/build/
+/linearSolvers/dist/
+/linearSolvers/nbproject/
+

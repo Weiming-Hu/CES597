@@ -1,31 +1,19 @@
-# PSU CSE 597 Course Project Repository
+# CSE 597 Course Project Repository
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Basic Info
 
-Author: Weiming Hu
-
-Date: Aug 2018
+Author: [Weiming Hu](weiming.ddns.net)
 
 Please see [license.txt](https://github.com/Weiming-Hu/CSE597/blob/master/LICENSE.txt) for licensing information.
 
 ### Compilation instructions
 
-```
-module load gcc/5.3.1
-make
-./helloWorld.out
-```
+##### Code
 
-This should output:
+Compilation has been changed. It needs updating.
 
-```
-Weiming says "Hello world!"
-```
+### Write-Up
 
-### Write-up compilation instructions
-
-```
-./pdfmake.sh
-```
+Write-up has been moved to online repository. The URL will be provided.
