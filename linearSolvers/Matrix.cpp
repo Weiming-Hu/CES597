@@ -21,20 +21,38 @@ Matrix::Matrix(size_t nrows, size_t ncols) {
     resize(nrows, ncols);
 }
 
-//matrix::matrix(const matrix& orig) {
-//}
+Matrix::Matrix(const Matrix& orig) {
+    *this = orig;
+}
 
 Matrix::~Matrix() {
     resize(0, 0);
 }
 
+Matrix &
+        Matrix::operator=(const Matrix & rhs) {
+    if (this != &rhs) {
+        nrows_ = rhs.nrows_;
+        ncols_ = rhs.ncols_;
+        
+        vector< vector<double> >::resize(nrows_);
+        for (size_t i = 0; i < nrows_; i++) {
+            (*this)[i].resize(ncols_);
+            for (size_t j = 0; j < ncols_; j++) {
+                (*this)[i][j] = rhs[i][j];
+            }
+        }
+    }
+    return (*this);
+}
+
 void
 Matrix::resize(size_t nrows, size_t ncols) {
     vector< vector<double> >::resize(nrows);
-    for (auto & row : *this) {
+    for (auto & row : * this) {
         row.resize(ncols, 0);
     }
-    
+
     nrows_ = nrows;
     ncols_ = ncols;
 }

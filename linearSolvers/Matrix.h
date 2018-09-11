@@ -17,9 +17,10 @@ public:
     Matrix();
     Matrix(std::size_t nsize);
     Matrix(std::size_t nrows, std::size_t ncols);
-    Matrix(const Matrix& orig) = delete;
+    Matrix(const Matrix& orig);
     virtual ~Matrix();
     
+    Matrix & operator=(const Matrix & rhs);
     void resize(std::size_t nrows, std::size_t ncols);;;
     size_t nrows() const;
     size_t ncols() const;

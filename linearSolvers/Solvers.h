@@ -17,9 +17,13 @@ public:
     Solvers(const Solvers& orig) = delete;
     virtual ~Solvers();
 
-    bool forwardElimination(Matrix & mat) const;
-    std::vector<double> solveSubstitution(const Matrix & lhs_mat,
-            const std::vector<double> & rhs_vec, bool forward = false);
+    bool elimination(Matrix & mat, bool forward) const;
+    std::vector<double> substitution(const Matrix & lhs_mat,
+            const std::vector<double> & rhs_vec, bool forward);
+    bool decomposition(const Matrix & mat);
+    
+    std::vector<double> serialSolver(const Matrix & lhs_mat,
+            const std::vector<double> & rhs_vec);
 
 private:
 

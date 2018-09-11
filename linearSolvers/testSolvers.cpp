@@ -13,16 +13,14 @@ using namespace std;
 int main() {
     
     Solvers so;
-    size_t nsize = 10;
+    size_t nsize = 2;
     Matrix mat(nsize);
     
-    for (size_t i = 0; i < nsize; i++)
-        for (size_t j = 0; j < nsize; j++)
-            mat[i][j] = rand() % 1000 + 1;
+    mat[0][0] = 4;
+    mat[0][1] = 2;
+    mat[1][0] = 3;
+    mat[1][1] = 4;
     
-    cout << "Before elimination: " << endl << mat;
-    so.forwardElimination(mat);
-    cout << "After elimination: " << endl << mat;
     
     return 0;
 }
