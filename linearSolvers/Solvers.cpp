@@ -13,6 +13,7 @@
 #include <numeric>
 #include <algorithm>
 #include <sstream>
+#include <cmath>
 
 using namespace std;
 
@@ -40,7 +41,7 @@ Solvers::elimination(Matrix & mat, bool forward) const {
 
             for (size_t i = k + 1; i < nsize; i++) {
 
-                if (abs(mat[k][k]) < _ZERO_LIMIT) {
+                if (std::abs(mat[k][k]) < _ZERO_LIMIT) {
                     ostringstream message;
                     message << "0 occurs (" << mat[k][k]
                             << "). Please use row permutation.";
@@ -83,7 +84,7 @@ Solvers::substitution(const Matrix & lhs_mat,
                 sum += lhs_mat[i][j] * rhs_vec[j];
             }
 
-            if (abs(lhs_mat[i][i]) < _ZERO_LIMIT) {
+            if (std::abs(lhs_mat[i][i]) < _ZERO_LIMIT) {
                 ostringstream message;
                 message << "0 occurs (" << lhs_mat[i][i] << ").";
                 throw runtime_error(message.str());
@@ -94,14 +95,14 @@ Solvers::substitution(const Matrix & lhs_mat,
 
     } else {
 
-        for (size_t i = nsize - 1; i >= 0; i--) {
+        for (int i = nsize - 1; i >= 0; i--) {
             double sum = 0;
 
-            for (size_t j = nsize - 1; j > i; j--) {
+            for (int j = nsize - 1; j > i; j--) {
                 sum += lhs_mat[i][j] * rhs_vec[j];
             }
 
-            if (abs(lhs_mat[i][i]) < _ZERO_LIMIT) {
+            if (std::abs(lhs_mat[i][i]) < _ZERO_LIMIT) {
                 ostringstream message;
                 message << "0 occurs (" << lhs_mat[i][i] << ").";
                 throw runtime_error(message.str());
@@ -118,13 +119,13 @@ bool
 Solvers::decomposition(const Matrix & mat) {
     Matrix mat_U(mat), mat_L(mat.ncols());
     elimination(mat_U, true);
-    
-    
+    return true;
 }
 
 
 std::vector<double>
 Solvers::serialSolver(const Matrix & lhs_mat, 
         const std::vector<double> & rhs_vec) {
-    
+    vector<double> tmp;
+    return tmp;
 }

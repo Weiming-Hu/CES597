@@ -1,7 +1,8 @@
 # Copyright (c) 2018 Weiming Hu
 
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.1)
 project (linearSolvers)
+set (CMAKE_CXX_STANDARD 11)
 
 # Set the output folder
 set (COMMON_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/output")
