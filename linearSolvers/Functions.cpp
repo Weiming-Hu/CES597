@@ -1,12 +1,12 @@
 /* Copyright (c) 2018 Weiming Hu
  * 
- * File:   Solvers.cpp
+ * File:   Functions.cpp
  * Author: Weiming Hu
  * 
  * Created on September 10, 2018, 1:10 PM
  */
 
-#include "Solvers.h"
+#include "Functions.h"
 #include "Matrix.h"
 
 #include <exception>
@@ -14,23 +14,22 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-#include <cmath>
 
 using namespace std;
 
 static const double _ZERO_LIMIT = 1.0e-9;
 
-Solvers::Solvers() {
+Functions::Functions() {
 }
 
 //Solvers::Solvers(const Solvers& orig) {
 //}
 
-Solvers::~Solvers() {
+Functions::~Functions() {
 }
 
 bool
-Solvers::inverse(const Matrix & mat_in, Matrix & mat_inv) const {
+Functions::inverse(const Matrix & mat_in, Matrix & mat_inv) const {
 
     auto nsize = mat_in.nrows();
     if (nsize != mat_in.ncols())
@@ -102,7 +101,7 @@ Solvers::inverse(const Matrix & mat_in, Matrix & mat_inv) const {
 }
 
 bool
-Solvers::multiply(const Matrix & mat_lhs, const Matrix & mat_rhs,
+Functions::multiply(const Matrix & mat_lhs, const Matrix & mat_rhs,
         Matrix & mat_mul) const {
 
     if (mat_lhs.ncols() != mat_rhs.nrows()) {
@@ -129,7 +128,59 @@ Solvers::multiply(const Matrix & mat_lhs, const Matrix & mat_rhs,
 }
 
 bool
-Solvers::transpose(const Matrix & mat, Matrix & mat_out) const {
+Functions::minus(const Matrix & mat_lhs, const Matrix & mat_rhs,
+        Matrix & mat_minux) const {
+
+    if (mat_lhs.ncols() != mat_rhs.ncols()) {
+        throw runtime_error("Matrices do not have the correct shape.");
+    }
+
+    if (mat_lhs.nrows() != mat_rhs.nrows()) {
+        throw runtime_error("Matrices do not have the correct shape.");
+    }
+
+    size_t nrows = mat_lhs.nrows();
+    size_t ncols = mat_lhs.ncols();
+
+    mat_minux.resize(nrows, ncols);
+
+    for (size_t i = 0; i < nrows; i++) {
+        for (size_t j = 0; j < ncols; j++) {
+            mat_minux[i][j] = mat_lhs[i][j] - mat_rhs[i][j];
+        }
+    }
+
+    return true;
+}
+
+bool
+Functions::add(const Matrix & mat_lhs, const Matrix & mat_rhs,
+        Matrix & mat_add) const {
+
+    if (mat_lhs.ncols() != mat_rhs.ncols()) {
+        throw runtime_error("Matrices do not have the correct shape.");
+    }
+
+    if (mat_lhs.nrows() != mat_rhs.nrows()) {
+        throw runtime_error("Matrices do not have the correct shape.");
+    }
+
+    size_t nrows = mat_lhs.nrows();
+    size_t ncols = mat_lhs.ncols();
+
+    mat_add.resize(nrows, ncols);
+
+    for (size_t i = 0; i < nrows; i++) {
+        for (size_t j = 0; j < ncols; j++) {
+            mat_add[i][j] = mat_lhs[i][j] + mat_rhs[i][j];
+        }
+    }
+
+    return true;
+}
+
+bool
+Functions::transpose(const Matrix & mat, Matrix & mat_out) const {
 
     size_t nrows = mat.ncols();
     size_t ncols = mat.nrows();
@@ -145,7 +196,22 @@ Solvers::transpose(const Matrix & mat, Matrix & mat_out) const {
 }
 
 bool
-Solvers::readMatrix(const std::string & csv_file, Matrix & mat_out) const {
+Functions::check_zero(Matrix & mat, double zero_threshold) const {
+    if (std::isnan(zero_threshold)) {
+        zero_threshold = _ZERO_LIMIT;
+    }
+
+    for (size_t i = 0; i < mat.nrows(); i++) {
+        for (size_t j = 0; j < mat.ncols(); j++) {
+            if (mat[i][j] < zero_threshold)
+                mat[i][j] = 0.0;
+        }
+    }
+    return true;
+}
+
+bool
+Functions::readMatrix(const std::string & csv_file, Matrix & mat_out) const {
     ifstream file;
     file.open(csv_file);
 
@@ -172,7 +238,7 @@ Solvers::readMatrix(const std::string & csv_file, Matrix & mat_out) const {
             nrows++;
         }
     }
-    
+
     size_t index = 0;
     size_t ncols = tmp_vec.size() / nrows;
     mat_out.resize(nrows, ncols);
@@ -187,19 +253,19 @@ Solvers::readMatrix(const std::string & csv_file, Matrix & mat_out) const {
 }
 
 bool
-Solvers::readVector(const std::string & csv_file,
+Functions::readVector(const std::string & csv_file,
         std::vector<double> & vec_out) const {
     ifstream file;
     file.open(csv_file);
-    
+
     if (!file.is_open()) {
         throw runtime_error("File can't be opened!");
     }
-    
+
     char comma;
     string buffer;
     double tmp_val;
-    
+
     vec_out.clear();
     getline(file, buffer);
     if (!buffer.empty()) {
@@ -210,7 +276,7 @@ Solvers::readVector(const std::string & csv_file,
             iss >> comma;
         }
     }
-    
+
     return (true);
 }
 

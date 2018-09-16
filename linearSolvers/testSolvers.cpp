@@ -7,13 +7,13 @@
 
 #include <iterator>
 
-#include "Solvers.h"
+#include "Functions.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
     
-    Solvers so;
+    Functions funcs;
     Matrix mat;
     
     if (argc != 3) {
@@ -21,23 +21,23 @@ int main(int argc, char** argv) {
         return 0;
     }
     
-    so.readMatrix(argv[argc-2], mat);
+    funcs.readMatrix(argv[argc-2], mat);
     cout << "Original matrix: " << endl << mat;
     
     Matrix mat_inv;
-    so.inverse(mat, mat_inv);
+    funcs.inverse(mat, mat_inv);
     cout << "Inverse matrix:" << endl << mat_inv;
     
     Matrix mat_mul;
-    so.multiply(mat, mat_inv, mat_mul);
+    funcs.multiply(mat, mat_inv, mat_mul);
     cout << "mat * mat_inv = " << endl << mat_mul;
     
     Matrix mat_t;
-    so.transpose(mat, mat_t);
+    funcs.transpose(mat, mat_t);
     cout << "Transpose of original matrix:" << endl << mat_t;
     
     vector<double> vec;
-    so.readVector(argv[argc-1], vec);
+    funcs.readVector(argv[argc-1], vec);
     cout << "Input vector: ";
     copy(vec.begin(), vec.end(), ostream_iterator<double>(cout, " "));
     cout << endl;
