@@ -203,7 +203,7 @@ Functions::check_zero(Matrix & mat, double zero_threshold) const {
 
     for (size_t i = 0; i < mat.nrows(); i++) {
         for (size_t j = 0; j < mat.ncols(); j++) {
-            if (mat[i][j] < zero_threshold)
+            if (std::abs(mat[i][j]) < zero_threshold)
                 mat[i][j] = 0.0;
         }
     }

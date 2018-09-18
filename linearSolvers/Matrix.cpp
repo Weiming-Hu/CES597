@@ -92,4 +92,5 @@ Matrix::print(ostream & os) const {
 ostream &
 operator<<(ostream & os, const Matrix & mat) {
     mat.print(os);
+    return os;
 }
