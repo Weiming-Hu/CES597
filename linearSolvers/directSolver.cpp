@@ -6,40 +6,50 @@
  * Created on September 11, 2018, 4:31 PM
  */
 
-#include "Functions.h"
+#include "Matrix.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
-
-    if (argc != 3) {
-        cout << "directSolvers <matrix csv> <vector csv>" << endl;
+    
+    if (argc != 3 && argc != 4) {
+        cout << "directSolvers [-v] <matrix csv> <vector csv>" << endl;
         return 0;
     }
 
-    Matrix mat_ori, vec;
-    Functions funcs;
-
-    funcs.readMatrix(argv[argc - 2], mat_ori);
-    funcs.readMatrix(argv[argc - 1], vec);
+    // Read verbose flag
+    bool verbose = false;
+    if (argc == 4) {
+        string verbose_str = argv[argc - 3];
+        if (verbose_str == "-v" || verbose_str == "--verbose")
+            verbose = true;
+    }
+    
+    // I store the vector b in form of a matrix with only one column.
+    Matrix A, b;
+    
+    // Read input files
+    A.readMatrix(argv[argc - 2]);
+    b.readMatrix(argv[argc - 1]);
     
     // Check the dimensions of input
-    if (mat_ori.nrows() != vec.size()) 
+    if (A.nrows() != b.nrows()) 
         throw runtime_error("Matrix and vector do not have correct shapes.");
+    
+    if (verbose) cout << "Input matrix A: " << A
+            << "Input vector b: " << b;
+    
+    
+    Matrix A_t(A);
+    A_t.transpose();
     
     // Solve the system with normal equation
     //       t     t -1
     //  x = A  (A A )   b
     //
-    Matrix mat_t, mat_inv, mat_mul, mat_out;
-    funcs.transpose(mat_ori, mat_t);
-    funcs.multiply(mat_ori, mat_t, mat_mul);
-    funcs.inverse(mat_mul, mat_inv);
-    funcs.multiply(mat_t, mat_inv, mat_mul);
-    funcs.multiply(mat_mul, vec, mat_out);
+    Matrix x = A_t * (A * A_t).inverse() * b;
     
-    funcs.check_zero(mat_out);
-    cout << "The solution is " << endl << mat_out << endl;
-
+    if (verbose) cout << "Result x is: " << x << endl;
+    
     return 0;
 }

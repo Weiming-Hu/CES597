@@ -20,14 +20,27 @@ public:
     Matrix(const Matrix& orig);
     virtual ~Matrix();
     
-    Matrix & operator=(const Matrix & rhs);
     void resize(std::size_t nrows, std::size_t ncols);;;
     size_t nrows() const;
     size_t ncols() const;
     
+    // Read matrix from file
+    bool readMatrix(const std::string & csv_file);
     
+    // Matrix inverse
+    Matrix inverse();
+    
+    // Matrix transpose
+    Matrix transpose();
+
     // Print functions
     void print(std::ostream &) const;
+    
+    // Overload operators
+    Matrix & operator=(const Matrix & rhs);
+    friend Matrix operator+(const Matrix & lhs, const Matrix & rhs);
+    friend Matrix operator-(const Matrix & lhs, const Matrix & rhs);
+    friend Matrix operator*(const Matrix & lhs, const Matrix & rhs);
     friend std::ostream & operator<<(std::ostream &, const Matrix &);
     
 private:

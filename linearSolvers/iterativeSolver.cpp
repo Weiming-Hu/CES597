@@ -6,8 +6,6 @@
  * Created on September 15, 2018, 4:51 PM
  */
 
-#include "Functions.h"
-
 using namespace std;
 
 int main(int argc, char** argv) {
