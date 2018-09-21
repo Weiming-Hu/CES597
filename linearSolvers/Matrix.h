@@ -20,9 +20,15 @@ public:
     Matrix(const Matrix& orig);
     virtual ~Matrix();
     
-    void resize(std::size_t nrows, std::size_t ncols);;;
+    void resize(std::size_t nrows, std::size_t ncols);
     size_t nrows() const;
     size_t ncols() const;
+    
+    // LU decomposition
+    bool docompose(Matrix & L, Matrix & U) const;
+    
+    // Check whether the matrix is diagonally dominant
+    bool checkDominant()const;
     
     // Read matrix from file
     bool readMatrix(const std::string & csv_file);

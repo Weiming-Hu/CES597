@@ -4,6 +4,16 @@ cmake_minimum_required (VERSION 3.1)
 project (Matrix)
 set (CMAKE_CXX_STANDARD 11)
 
+if (NOT CMAKE_BUILD_TYPE)
+    set (CMAKE_BUILD_TYPE "Release")
+endif (NOT CMAKE_BUILD_TYPE)
+message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
+
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    message(STATUS "Add definitions for debugging")
+    add_definitions(-D_DEBUG)
+endif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+
 # Set the output folder
 set (COMMON_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/output")
 if (EXISTS ${COMMON_OUTPUT_DIR})

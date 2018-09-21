@@ -9,8 +9,10 @@
 #include "Matrix.h"
 
 #include <fstream>
+#include <cmath>
 #include <sstream>
 #include <vector>
+#include <numeric>
 
 using namespace std;
 static const double _ZERO_LIMIT = 1.0e-9;
@@ -53,6 +55,26 @@ Matrix::nrows() const {
 size_t
 Matrix::ncols() const {
     return (ncols_);
+}
+
+bool
+Matrix::docompose(Matrix & L, Matrix & U) const {
+    
+}
+
+bool
+Matrix::checkDominant() const {
+    double sum;
+    for (size_t i = 0; i < nrows_; i++) {
+        sum = accumulate((*this)[i].begin(), (*this)[i].end(), 0.0, [](
+                double lhs, double rhs) {
+            return (std::abs(lhs) + std::abs(rhs));
+        });
+        if ((*this)[i][i] < sum - (*this)[i][i]) {
+            return false;
+        }
+    }
+    return (true);
 }
 
 bool
@@ -117,7 +139,7 @@ Matrix::inverse() {
     // Forward elimination
     for (size_t k = 0; k < nsize - 1; k++) {
         for (size_t i = k + 1; i < nsize; i++) {
-
+            
             if (std::abs(mat[k][k]) < _ZERO_LIMIT) {
                 ostringstream message;
                 message << "0 occurs (" << mat[k][k]
@@ -136,10 +158,15 @@ Matrix::inverse() {
             }
         }
     }
-
+    
     // Change the proceeding of each line to 1
     for (size_t i = 0; i < nsize; i++) {
 
+        if (std::abs(mat[i][i]) < _ZERO_LIMIT) {
+            ostringstream message;
+            message << mat[i][i] << " occurs during inverse.";
+            throw runtime_error(message.str());
+        }
         double coef = mat[i][i];
 
         for (size_t j = i; j < nsize; j++) {

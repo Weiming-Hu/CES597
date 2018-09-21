@@ -13,14 +13,14 @@ using namespace std;
 int main(int argc, char** argv) {
     
     if (argc != 3 && argc != 4) {
-        cout << "directSolvers [-v] <matrix csv> <vector csv>" << endl;
+        cout << "directSolvers <matrix csv> <vector csv> [--verbose,-v]" << endl;
         return 0;
     }
 
     // Read verbose flag
     bool verbose = false;
     if (argc == 4) {
-        string verbose_str = argv[argc - 3];
+        string verbose_str = argv[argc - 1];
         if (verbose_str == "-v" || verbose_str == "--verbose")
             verbose = true;
     }
@@ -29,8 +29,8 @@ int main(int argc, char** argv) {
     Matrix A, b;
     
     // Read input files
-    A.readMatrix(argv[argc - 2]);
-    b.readMatrix(argv[argc - 1]);
+    A.readMatrix(argv[1]);
+    b.readMatrix(argv[2]);
     
     // Check the dimensions of input
     if (A.nrows() != b.nrows()) 
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     //
     Matrix x = A_t * (A * A_t).inverse() * b;
     
-    if (verbose) cout << "Result x is: " << x << endl;
+    cout << "Result x is: " << x << endl;
     
     return 0;
 }
