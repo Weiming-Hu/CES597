@@ -6,96 +6,97 @@
  * Created on September 15, 2018, 4:51 PM
  */
 
+#include "Matrix.h"
+
+#include <numeric>
+#include <ctime>
+
 using namespace std;
 
 int main(int argc, char** argv) {
 
-
-    Matrix A, b;
-    Functions funcs;
-    bool verbose = false;
-
-    if (argc == 3) {
-        funcs.readMatrix(argv[argc - 2], A);
-        funcs.readMatrix(argv[argc - 1], b);
-    } else if (argc == 4) {
-        funcs.readMatrix(argv[argc - 3], A);
-        funcs.readMatrix(argv[argc - 2], b);
-        
-        string tmp(argv[argc-1]);
-        if (tmp == "-v" || tmp == "--verbose") {
-            verbose = true;
-        }
-
-    } else {
-        cout << "iterativeSolver <matrix csv> <btor csv> [-v,--verbose]" << endl;
+    if (argc != 3 && argc != 4) {
+        cout << "iterativeSolver [-v] <matrix csv> <vector csv>" << endl;
         return 0;
     }
 
+    // Read verbose flag
+    bool verbose = false;
+    if (argc == 4) {
+        string verbose_str = argv[argc - 3];
+        if (verbose_str == "-v" || verbose_str == "--verbose")
+            verbose = true;
+    }
+
+    // I store the vector b in form of a matrix with only one column.
+    Matrix A, b;
+
+    // Read input files
+    A.readMatrix(argv[argc - 2]);
+    b.readMatrix(argv[argc - 1]);
+    
     // Jacobi method
     //
-    // Target Ax = b
-    // We have A = K + N
-    // The iteration scheme is x_k+1 = K^-1 * (b - N * x_k)
+    // For the linear system Ax = b
+    // We have A = D + R
+    // The iteration scheme is x_k+1 = D^-1 * (b - R * x_k)
     //
-    Matrix K(A.nrows()), K_inv;
+    
+    // D is the identity matrix
+    Matrix D(A.nrows());
+    for (size_t i = 0; i < D.nrows(); i++) D[i][i] = A[i][i];    
+    
+    // Inverse matrix D
+    Matrix D_inv(D.inverse());
+    
+    // Initialize the matrix R
+    Matrix R = A - D;
 
-    for (size_t i = 0; i < K.nrows(); i++) {
-        K[i][i] = A[i][i];
-    }
-
-    funcs.inverse(K, K_inv);
-
-    Matrix N;
-    funcs.minus(A, K, N);
-
-    if (verbose) {
-        cout << "A is " << A << endl
-            << "K is " << K << endl
-            << "N is " << N << endl;
-    }
-
-    // Initialize the residual and the threshold
-    double resid = 999, small_resid = 1.0e-3;
+    // Initialize the residual vector
+    Matrix resids;
+    
+    // Initialize the residual metric
+    double resid_metric = 999;
+    
+    // Initialize the residual threshold
+    double small_resid = 1.0e-3;
 
     // Define the maximum iteration number
-    size_t max_it = 500;
+    size_t max_it = 100;
 
     // Initialize the solution
-    Matrix solution, solution_new(A.ncols(), 1);
-
+    Matrix solution, solution_new(b.nrows(), 1);
     std::srand(std::time(nullptr));
     for (size_t i = 0; i < solution_new.nrows(); i++) {
         solution_new[i][0] = 1;
     }
 
-    if (verbose)
-        cout << "Initialized solution: " << endl << solution_new << endl;
-    
-    // The iteration scheme is x_k+1 = K^-1 * (b - N * x_k)
-    for (size_t i_it = 0; i_it < max_it && resid > small_resid; i_it++) {
-
-        Matrix mat_mul, mat_add;
-        solution = solution_new;
-
-        funcs.multiply(N, solution, mat_mul);
-        funcs.minus(b, mat_mul, mat_add);
-        funcs.multiply(K_inv, mat_add, solution_new);
-
-        if (verbose) cout << "new solution : " << solution_new << endl;
-
-        resid = 0;
-        for (size_t i = 0; i < solution.nrows(); i++) {
-            resid += abs(solution_new[i][0] - solution[i][0]);
-        }
-        
-        resid /= solution.nrows();
-        if (verbose) cout << "Iteration " << i_it + 1 << " residual : " << resid << endl;
+    if (verbose) {
+        cout << "A is " << A << "D is " << D << "R is " << R << endl
+                << "Initialized solution: " << solution_new << endl;
     }
     
-    funcs.check_zero(solution);
+    for (size_t i_it = 0; i_it < max_it && resid_metric > small_resid; i_it++) {
+        
+        solution = solution_new;
+        solution_new = D_inv * (b - R * solution);
+        
+        resids = A * solution_new - b;
+        resid_metric = accumulate(resids.begin(), resids.end(), 0.0, [](
+                const double lhs, const vector<double> rhs) {
+            return (lhs + std::abs(rhs[0]));
+        });
+        
+        if (verbose) {
+//            cout << "Iteration " << i_it + 1 << " residual : " << resid_metric
+//                    << endl << "new solution : " << solution_new << endl;
+            cout << "Iteration " << i_it + 1 << " residual : " << resid_metric << endl;
+        }
+    }
 
-    cout << "The solution is " << endl << solution << endl;
+    if (verbose) {
+        cout << "Result x is " << endl << solution << endl;
+    }
 
     return 0;
 }

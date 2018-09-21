@@ -19,8 +19,7 @@ set_target_properties(Matrix
     PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${COMMON_OUTPUT_DIR}/lib")
 
 # Set the names of the files for building executables
-#set (PROGRAM_NAMES "testMatrix;directSolver;iterativeSolver")
-set (PROGRAM_NAMES "testMatrix;directSolver")
+set (PROGRAM_NAMES "testMatrix;directSolver;iterativeSolver")
 foreach (PROGRAM_NAME IN LISTS PROGRAM_NAMES)
     message(STATUS "building program ${PROGRAM_NAME}")
     add_executable (${PROGRAM_NAME} "${PROGRAM_NAME}.cpp")
