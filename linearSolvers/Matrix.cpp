@@ -58,17 +58,12 @@ Matrix::ncols() const {
 }
 
 bool
-Matrix::docompose(Matrix & L, Matrix & U) const {
-    
-}
-
-bool
 Matrix::checkDominant() const {
     double sum;
     for (size_t i = 0; i < nrows_; i++) {
         sum = accumulate((*this)[i].begin(), (*this)[i].end(), 0.0, [](
                 double lhs, double rhs) {
-            return (std::abs(lhs) + std::abs(rhs));
+            return (abs(lhs) + abs(rhs));
         });
         if ((*this)[i][i] < sum - (*this)[i][i]) {
             return false;
@@ -140,7 +135,7 @@ Matrix::inverse() {
     for (size_t k = 0; k < nsize - 1; k++) {
         for (size_t i = k + 1; i < nsize; i++) {
             
-            if (std::abs(mat[k][k]) < _ZERO_LIMIT) {
+            if (abs(mat[k][k]) < _ZERO_LIMIT) {
                 ostringstream message;
                 message << "0 occurs (" << mat[k][k]
                         << "). Please use row permutation.";
@@ -162,7 +157,7 @@ Matrix::inverse() {
     // Change the proceeding of each line to 1
     for (size_t i = 0; i < nsize; i++) {
 
-        if (std::abs(mat[i][i]) < _ZERO_LIMIT) {
+        if (abs(mat[i][i]) < _ZERO_LIMIT) {
             ostringstream message;
             message << mat[i][i] << " occurs during inverse.";
             throw runtime_error(message.str());

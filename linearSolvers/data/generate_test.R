@@ -17,10 +17,16 @@
 #
 
 # size <- readline("Size: ")
-size <- 3
+size <- 1000
 
 A <- matrix(sample(size*size)/size, nrow = size, ncol = size)
 b <- sample(size)
+
+# Make the matrix diagonally dominant
+for (i in 1:nrow(A)) {
+  A[i, i] <- sum(abs(A[i, ])) + abs(A[i, i])
+}
+
 x <- solve(A, b)
 
 cat(paste("Generate test files for size", size, "..."))

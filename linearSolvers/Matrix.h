@@ -24,9 +24,6 @@ public:
     size_t nrows() const;
     size_t ncols() const;
     
-    // LU decomposition
-    bool docompose(Matrix & L, Matrix & U) const;
-    
     // Check whether the matrix is diagonally dominant
     bool checkDominant()const;
     
