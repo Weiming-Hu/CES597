@@ -9,19 +9,13 @@
 #include "Matrix.h"
 
 #include <numeric>
+#include <iomanip>
 #include <cmath>
 #include <ctime>
 
 using namespace std;
 
-// Verbose level specification
-// 0 - Result only
-// 1 - The above plus iteration information
-// 2 - The above plus input 
-// 3 - The above plus transformed matrix
-//
-
-void runGauss(const Matrix & A, const Matrix & b, int verbose) {
+void runGauss(const Matrix & A, const Matrix & b, Matrix & solution, int verbose) {
     // Gauss-Seidel Method
     //
     // For the linear system Ax = b,
@@ -60,20 +54,20 @@ void runGauss(const Matrix & A, const Matrix & b, int verbose) {
     double small_resid = 1.0e-3;
 
     // Define the maximum iteration number
-    size_t max_it = 100;
+    size_t max_it = 1000;
 
     // Initialize the solution
-    Matrix solution, solution_new(b.nrows(), 1);
+    Matrix solution_new(b.nrows(), 1);
     std::srand(std::time(nullptr));
     for (size_t i = 0; i < solution_new.nrows(); i++) {
         solution_new[i][0] = rand();
     }
 
-    if (verbose >= 2) {
+    if (verbose >= 3) {
         cout << "A is " << A << "b is " << b;
     }
 
-    if (verbose >= 3) {
+    if (verbose >= 4) {
         cout << "D is " << D << "L is " << L << "U is " << U
             << "Initialized solution: " << solution_new << endl;
     }
@@ -89,8 +83,8 @@ void runGauss(const Matrix & A, const Matrix & b, int verbose) {
             return (lhs + abs(rhs[0]));
         });
 
-        if (verbose >= 1) {
-            cout << "Iteration " << i_it + 1 << " residual : " << resid_metric << endl;
+        if (verbose >= 2) {
+            cout << "Iteration " << i_it + 1 << " residual: " << resid_metric << endl;
         }
     }
 
@@ -99,16 +93,14 @@ void runGauss(const Matrix & A, const Matrix & b, int verbose) {
                 << " Jacobi Method might not converge." << endl;
     }
 
-    if (verbose >= 3) {
+    if (verbose >= 4) {
         cout << "The iteration matrix M_inv * N is: " << M_inv * U << endl;
     }
-
-    cout << "Result from Gauss-Seidel x is " << endl << solution << endl;
 
     return;
 }
 
-void runJacobi(const Matrix & A, const Matrix & b, int verbose) {
+void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution, int verbose) {
     // Jacobi Method
     //
     // For the linear system Ax = b,
@@ -136,20 +128,20 @@ void runJacobi(const Matrix & A, const Matrix & b, int verbose) {
     double small_resid = 1.0e-3;
 
     // Define the maximum iteration number
-    size_t max_it = 100;
+    size_t max_it = 1000;
 
     // Initialize the solution
-    Matrix solution, solution_new(b.nrows(), 1);
+    Matrix solution_new(b.nrows(), 1);
     std::srand(std::time(nullptr));
     for (size_t i = 0; i < solution_new.nrows(); i++) {
         solution_new[i][0] = rand();
     }
 
-    if (verbose >= 2) {
+    if (verbose >= 3) {
         cout << "A is " << A << "b is " << b;
     }
 
-    if (verbose >= 3) {
+    if (verbose >= 4) {
         cout  << "D is " << D << "R is " << R
             << "Initialized solution: " << solution_new << endl;
     }
@@ -165,8 +157,8 @@ void runJacobi(const Matrix & A, const Matrix & b, int verbose) {
             return (lhs + abs(rhs[0]));
         });
 
-        if (verbose >= 1) {
-            cout << "Iteration " << i_it + 1 << " residual : " << resid_metric << endl;
+        if (verbose >= 2) {
+            cout << "Iteration " << i_it + 1 << " residual: " << resid_metric << endl;
         }
     }
 
@@ -175,24 +167,25 @@ void runJacobi(const Matrix & A, const Matrix & b, int verbose) {
                 << " Jacobi Method might not converge." << endl;
     }
 
-    if (verbose >= 3) {
+    if (verbose >= 4) {
         cout << "The iteration matrix D_inv * R is: " << D_inv * R << endl;
     }
     
-    cout << "Result from Jacobi x is " << endl << solution << endl;
-
     return;
 }
 
 int main(int argc, char** argv) {
 
     if (argc != 4 && argc != 5) {
-        cout << "iterativeSolver <Jacobi,J|Gauss,G> <matrix csv> <vector csv> [--verbose,-v]" << endl;
+        cout << "iterativeSolver <Jacobi,J|Gauss,G> <matrix csv> <vector csv> [A verbose flag integer]"
+             << endl << endl << "\tVerbose level specification: " << endl << "\t\t0 - Quiet" << endl
+             << "\t\t1 - Result only" << endl << "\t\t2 - The above plus iteration information" << endl
+             << "\t\t3 - The above plus input " << endl << "\t\t4 - The above plus transformed matrix" << endl;
         return 0;
     }
 
     // Read verbose flag
-    int verbose = 0;
+    int verbose = 1;
     if (argc == 5) {
         verbose = atoi(argv[argc - 1]);
     }
@@ -203,18 +196,41 @@ int main(int argc, char** argv) {
     // Read input files
     A.readMatrix(argv[2]);
     b.readMatrix(argv[3]);
-    
+
+#ifdef _PROFILE_TIME
+    clock_t time_start = clock();
+#endif
+
+    // Define solution
+    Matrix solution;
+
     // Read function name
     string function_str(argv[1]);
     if (function_str == "Jacobi" || function_str == "J") {
-        runJacobi(A, b, verbose);
+        runJacobi(A, b, solution, verbose);
 
     } else if (function_str == "Gauss" || function_str == "G") {
-        runGauss(A, b, verbose);
+        runGauss(A, b, solution, verbose);
 
     } else {
         cout << "Error: Unknown function name " << function_str << endl;
         return 1;
+    }
+
+#ifdef _PROFILE_TIME
+    clock_t time_end = clock();
+
+    double duration_total = (time_end - time_start) / (double) CLOCKS_PER_SEC;
+    cout << setprecision(4) << "Total time for the iterative method: "
+         << duration_total << "s" << endl;
+#endif
+
+    if (verbose >= 1) {
+        if (function_str == "Jacobi" || function_str == "J") {
+            cout << "Result from Jacobi x is " << endl << solution << endl;
+        } else if (function_str == "Gauss" || function_str == "G") {
+            cout << "Result from Gauss-Seidel x is " << endl << solution << endl;
+        }
     }
 
     return 0;

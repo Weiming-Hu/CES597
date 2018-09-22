@@ -13,6 +13,11 @@
 #include <sstream>
 #include <vector>
 #include <numeric>
+#include <iomanip>
+
+#ifdef _PROFILE_TIME
+#include <ctime>
+#endif
 
 using namespace std;
 static const double _ZERO_LIMIT = 1.0e-9;
@@ -128,6 +133,10 @@ Matrix::inverse() {
     for (size_t i = 0; i < nsize; i++) {
         mat_inv[i][i] = 1;
     }
+
+#ifdef _PROFILE_TIME
+    clock_t time_start = clock();
+#endif
     
     // Use Gaussian Elimination to solve the system
     //
@@ -153,6 +162,10 @@ Matrix::inverse() {
             }
         }
     }
+
+#ifdef _PROFILE_TIME
+    clock_t time_forward = clock();
+#endif
     
     // Change the proceeding of each line to 1
     for (size_t i = 0; i < nsize; i++) {
@@ -184,6 +197,21 @@ Matrix::inverse() {
             mat[i][j] -= mat[j][j] * mat[i][j];
         }
     }
+
+#ifdef _PROFILE_TIME
+    clock_t time_backward = clock();
+    
+    double duration_forward = (time_forward - time_start) /(double) CLOCKS_PER_SEC;
+    double duration_backward = (time_backward - time_forward) /(double) CLOCKS_PER_SEC;
+    double duration_total = (time_backward - time_start) /(double) CLOCKS_PER_SEC;
+
+    cout << setprecision(4) << "-----------------------------------" << endl
+         << "Time profiling for the matrix inverse function:" << endl
+         << "Forward elimination: " << duration_forward << "s (" << duration_forward / duration_total * 100 << "%)" << endl
+         << "Backward elimination: " << duration_backward << "s (" << duration_backward / duration_total * 100 << "%)" << endl
+         << "Inverse function total: " << duration_total << "s (" << duration_total / duration_total << ")" << endl
+         << "-----------------------------------" << endl;
+#endif
     
     return (mat_inv);
 }

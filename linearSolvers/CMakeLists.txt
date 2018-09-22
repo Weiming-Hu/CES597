@@ -4,6 +4,13 @@ cmake_minimum_required (VERSION 3.1)
 project (Matrix)
 set (CMAKE_CXX_STANDARD 11)
 
+option(PROFILE_TIME "Build programs with profiling functions" OFF)
+
+if (${PROFILE_TIME})
+    add_definitions(-D_PROFILE_TIME)
+    message(STATUS "Build programs with profiling functions")
+endif (${PROFILE_TIME})
+
 if (NOT CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE "Release")
 endif (NOT CMAKE_BUILD_TYPE)
@@ -36,5 +43,13 @@ foreach (PROGRAM_NAME IN LISTS PROGRAM_NAMES)
     target_link_libraries (${PROGRAM_NAME} Matrix)
     set_target_properties(${PROGRAM_NAME}
         PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${COMMON_OUTPUT_DIR}/bin")
+
+    if (EXE_SUFFIX)
+        set_target_properties(${PROGRAM_NAME}
+            PROPERTIES SUFFIX ${EXE_SUFFIX})
+    endif (EXE_SUFFIX)
+
     add_dependencies(${PROGRAM_NAME} Matrix)
 endforeach(PROGRAM_NAME IN PROGRAM_NAMES)
+
+message (STATUS "compile flags are ${CMAKE_CXX_FLAGS}")
