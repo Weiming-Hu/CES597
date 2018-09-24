@@ -21,6 +21,7 @@ An overview of the files is provided below.
 
 - `R/` contains the R scripts for data analyses and visualization.
 - `data/` contains the test data sets and the R script to generate them.
+- `reports/` contains the continuous reports for the project. The sources can be found in the [Write-Up](#write-up) section below.
 - `.gitignore` is the file specifying which files should be ignored in Git.
 - `CMakeLists.txt` guides CMake to generate a make file. Please see README.md for detailed usage.
 - `LICENSE.txt` is the MIT license.
@@ -71,7 +72,7 @@ make
 
 ### Write-Up
 
-Report #1 can be found at [Overleaf](https://v2.overleaf.com/project/5b8dbf5764a73d48a03b6064)
+Report #1 can be found at [Overleaf](https://v2.overleaf.com/read/xwwrxgnxptdm)
 
 ```
 # "`-''-/").___..--''"`-._
