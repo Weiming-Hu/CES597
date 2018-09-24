@@ -2,6 +2,7 @@
 *.dep.inc
 *.o
 *.out
+*DS_Store
 
 *build*
 dist/
