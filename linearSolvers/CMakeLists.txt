@@ -11,15 +11,12 @@ if (${PROFILE_TIME})
     message(STATUS "Build programs with profiling functions")
 endif (${PROFILE_TIME})
 
-if (NOT CMAKE_BUILD_TYPE)
-    set (CMAKE_BUILD_TYPE "Release")
-endif (NOT CMAKE_BUILD_TYPE)
-message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
-
-if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    message(STATUS "Add definitions for debugging")
-    add_definitions(-D_DEBUG)
-endif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE)
+    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        message(STATUS "Add definitions for debugging")
+        add_definitions(-D_DEBUG)
+    endif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+endif (CMAKE_BUILD_TYPE)
 
 # Set the output folder
 set (COMMON_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/output")
