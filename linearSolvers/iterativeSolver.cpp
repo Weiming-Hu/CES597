@@ -15,7 +15,8 @@
 
 using namespace std;
 
-void runGauss(const Matrix & A, const Matrix & b, Matrix & solution, int verbose) {
+void runGauss(const Matrix & A, const Matrix & b, Matrix & solution,
+        size_t max_it, size_t initialize_func, int verbose) {
     // Gauss-Seidel Method
     //
     // For the linear system Ax = b,
@@ -53,14 +54,19 @@ void runGauss(const Matrix & A, const Matrix & b, Matrix & solution, int verbose
     // Initialize the residual threshold
     double small_resid = 1.0e-3;
 
-    // Define the maximum iteration number
-    size_t max_it = 1000;
-
     // Initialize the solution
     Matrix solution_new(b.nrows(), 1);
-    std::srand(std::time(nullptr));
-    for (size_t i = 0; i < solution_new.nrows(); i++) {
-        solution_new[i][0] = rand();
+    if (initialize_func == 1) {
+        for (size_t i = 0; i < solution_new.nrows(); i++) {
+            solution_new[i][0] = 1;
+        }
+    } else if (initialize_func == 2) {
+        std::srand(std::time(nullptr));
+        for (size_t i = 0; i < solution_new.nrows(); i++) {
+            solution_new[i][0] = rand();
+        }
+    } else {
+        throw runtime_error("Error: Unknow initialize_func.");
     }
 
     if (verbose >= 3) {
@@ -100,7 +106,8 @@ void runGauss(const Matrix & A, const Matrix & b, Matrix & solution, int verbose
     return;
 }
 
-void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution, int verbose) {
+void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
+        size_t max_it, size_t initialize_func, int verbose) {
     // Jacobi Method
     //
     // For the linear system Ax = b,
@@ -127,14 +134,19 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution, int verbos
     // Initialize the residual threshold
     double small_resid = 1.0e-3;
 
-    // Define the maximum iteration number
-    size_t max_it = 1000;
-
     // Initialize the solution
     Matrix solution_new(b.nrows(), 1);
-    std::srand(std::time(nullptr));
-    for (size_t i = 0; i < solution_new.nrows(); i++) {
-        solution_new[i][0] = rand();
+    if (initialize_func == 1) {
+        for (size_t i = 0; i < solution_new.nrows(); i++) {
+            solution_new[i][0] = 1;
+        }
+    } else if (initialize_func == 2) {
+        std::srand(std::time(nullptr));
+        for (size_t i = 0; i < solution_new.nrows(); i++) {
+            solution_new[i][0] = rand();
+        }
+    } else {
+        throw runtime_error("Error: Unknow initialize_func.");
     }
 
     if (verbose >= 3) {
@@ -176,11 +188,13 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution, int verbos
 
 int main(int argc, char** argv) {
 
-    if (argc != 4 && argc != 5) {
-        cout << "iterativeSolver <Jacobi,J|Gauss,G> <matrix csv> <vector csv> [A verbose flag integer]"
+    if (argc != 6 && argc != 7) {
+        cout << "iterativeSolver <Jacobi,J|Gauss,G> <matrix csv> <vector csv> <maximum iteration> <initilization> [A verbose flag integer]"
              << endl << endl << "\tVerbose level specification: " << endl << "\t\t0 - Quiet" << endl
              << "\t\t1 - Result only" << endl << "\t\t2 - The above plus iteration information" << endl
-             << "\t\t3 - The above plus input " << endl << "\t\t4 - The above plus transformed matrix" << endl;
+             << "\t\t3 - The above plus input " << endl << "\t\t4 - The above plus transformed matrix" << endl
+             << endl << "\tInitialization specification: " << endl << "\t\t 1 - All 1s" << endl
+             << "\t\t2 - Random numbers" << endl;
         return 0;
     }
 
@@ -189,13 +203,16 @@ int main(int argc, char** argv) {
     if (argc == 5) {
         verbose = atoi(argv[argc - 1]);
     }
-    
+
     // I store the vector b in form of a matrix with only one column.
     Matrix A, b;
 
     // Read input files
     A.readMatrix(argv[2]);
     b.readMatrix(argv[3]);
+
+    size_t max_it = atoi(argv[4]);
+    size_t initialize_func = atoi(argv[5]);
 
 #ifdef _PROFILE_TIME
     clock_t time_start = clock();
@@ -207,10 +224,10 @@ int main(int argc, char** argv) {
     // Read function name
     string function_str(argv[1]);
     if (function_str == "Jacobi" || function_str == "J") {
-        runJacobi(A, b, solution, verbose);
+        runJacobi(A, b, solution, max_it, initialize_func, verbose);
 
     } else if (function_str == "Gauss" || function_str == "G") {
-        runGauss(A, b, solution, verbose);
+        runGauss(A, b, solution,  max_it, initialize_func, verbose);
 
     } else {
         cout << "Error: Unknown function name " << function_str << endl;
