@@ -11,7 +11,7 @@
 
 # Basic Information
 
-Author: [Weiming Hu](weiming.ddns.net)
+Author: [Weiming Hu](https://weiming.ddns.net)
 
 This project aims to develop an efficient C++ solver for linear systems, or the Ax = b problems. The solver is applied to verify probabilistic forecasts generated from the Analog Ensemble technique.
 
