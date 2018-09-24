@@ -3,13 +3,8 @@
 *.o
 *.out
 
-project-review.aux
-project-review.bbl
-project-review.blg
-project-review.dvi
-project-review.log
-/linearSolvers/*build*
-/linearSolvers/dist/
-/linearSolvers/nbproject/
-/linearSolvers/*output*
+*build*
+dist/
+nbproject/
+*output*
 
