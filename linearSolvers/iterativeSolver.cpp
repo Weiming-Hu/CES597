@@ -193,14 +193,14 @@ int main(int argc, char** argv) {
              << endl << endl << "\tVerbose level specification: " << endl << "\t\t0 - Quiet" << endl
              << "\t\t1 - Result only" << endl << "\t\t2 - The above plus iteration information" << endl
              << "\t\t3 - The above plus input " << endl << "\t\t4 - The above plus transformed matrix" << endl
-             << endl << "\tInitialization specification: " << endl << "\t\t 1 - All 1s" << endl
+             << endl << "\tInitialization specification: " << endl << "\t\t1 - All 1s" << endl
              << "\t\t2 - Random numbers" << endl;
         return 0;
     }
 
     // Read verbose flag
     int verbose = 1;
-    if (argc == 5) {
+    if (argc == 7) {
         verbose = atoi(argv[argc - 1]);
     }
 

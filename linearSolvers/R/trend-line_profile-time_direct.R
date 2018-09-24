@@ -23,8 +23,7 @@ plot(data, type = 'n', xlab = 'Size', ylab = 'Time (s)',
      xlim = range(new.x), ylim = range(model.3.new.y))
 lines(new.x, model.3.new.y, col = 'red', lty = 'dashed', lwd = 2)
 lines(new.x, model.2.new.y, col = 'purple', lty = 'dotdash', lwd = 2)
-points(data, pch = 16, cex = .8, xlab = 'Size', ylab = 'Time (s)',
-     xlim = range(new.x), ylim = range(model.3.new.y))
+points(data, pch = 16, cex = .8)
 legend('topleft', legend = c('O(n^2)', 'O(n^3)'), col = c('purple', 'red'),
        lty = c('dotdash', 'dashed'), lwd = 2)
 dev.off()
