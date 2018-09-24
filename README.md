@@ -1,10 +1,19 @@
 # CSE 597 Course Project Repository
 
+* [Basic Information](#basic-information)
+    * [Abstract](#abstract)
+        * [Compilation instructions](#compilation-instructions)
+                * [Code](#code)
+                * [Tunable Options in CMake](#tunable-options-in-cmake)
+        * [Write-Up](#write-up)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Basic Information
 
 Author: [Weiming Hu](weiming.ddns.net)
+
+This project aims to develop an efficient C++ solver for linear systems, or the Ax = b problems. The solver is applied to verify probabilistic forecasts generated from the Analog Ensemble technique.
 
 Please see [LICENSE.txt](https://github.com/Weiming-Hu/CSE597/blob/master/LICENSE.txt) for licensing information.
 
@@ -55,6 +64,7 @@ make
 |         CC         |                          The C compiler to use.                         | [System dependent] |
 |         CXX        |                         The C++ compiler to use.                        | [System dependent] |
 | CMAKE\_BUILD\_TYPE | "Release" for building release verbose; "Debug" for debugging purposes. |        None        |
+| CMAKE\_CXX\_FLAGS  |        The compiler and linking flags to be used for C++ codes.         |        None        |
 |     EXE\_SUFFIX    |                        The suffix of executables.                       |        None        |
 |    PROFILE\_TIME   |          Set it to "ON" to have profiling information printed.          |         OFF        |
 
