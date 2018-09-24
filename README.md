@@ -1,13 +1,13 @@
 # CSE 597 Course Project Repository
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 * [Basic Information](#basic-information)
     * [Abstract](#abstract)
         * [Compilation instructions](#compilation-instructions)
                 * [Code](#code)
                 * [Tunable Options in CMake](#tunable-options-in-cmake)
         * [Write-Up](#write-up)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Basic Information
 
