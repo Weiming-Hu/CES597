@@ -50,6 +50,9 @@ This study proposes a matrix approach to analyze the contribution of individual 
 [CMake](https://cmake.org/) is needed to generate the make file for the project. This project follows the conventional out-of-source build process.
 
 ```
+# If you are on PSU ACI clusters, please load modules
+# module load gcc/5.3.1 
+
 cd CSE597/
 mkdir build
 cd build
