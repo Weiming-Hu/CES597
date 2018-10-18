@@ -15,6 +15,8 @@
 
 using namespace std;
 
+#define _SMALL_VALUE 1.0e-3;
+
 void runGauss(const Matrix & A, const Matrix & b, Matrix & solution,
         size_t max_it, size_t initialize_func, int verbose) {
     // Gauss-Seidel Method
@@ -52,7 +54,7 @@ void runGauss(const Matrix & A, const Matrix & b, Matrix & solution,
     double resid_metric = 999;
 
     // Initialize the residual threshold
-    double small_resid = 1.0e-3;
+    double small_resid = _SMALL_VALUE;
 
     // Initialize the solution
     Matrix solution_new(b.nrows(), 1);
@@ -64,6 +66,10 @@ void runGauss(const Matrix & A, const Matrix & b, Matrix & solution,
         std::srand(std::time(nullptr));
         for (size_t i = 0; i < solution_new.nrows(); i++) {
             solution_new[i][0] = rand();
+        }
+    } else if (initialize_func == 3) {
+        for (size_t i = 0; i < solution_new.nrows(); i++) {
+            solution_new[i][0] = b[0][0] / A[0][i] / solution_new.nrows();
         }
     } else {
         throw runtime_error("Error: Unknow initialize_func.");
@@ -132,7 +138,7 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
     double resid_metric = 999;
 
     // Initialize the residual threshold
-    double small_resid = 1.0e-3;
+    double small_resid = _SMALL_VALUE;
 
     // Initialize the solution
     Matrix solution_new(b.nrows(), 1);
@@ -144,6 +150,10 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
         std::srand(std::time(nullptr));
         for (size_t i = 0; i < solution_new.nrows(); i++) {
             solution_new[i][0] = rand();
+        }
+    } else if (initialize_func == 3) {
+        for (size_t i = 0; i < solution_new.nrows(); i++) {
+            solution_new[i][0] = b[0][0] / A[0][i] / solution_new.nrows();
         }
     } else {
         throw runtime_error("Error: Unknow initialize_func.");
@@ -194,7 +204,7 @@ int main(int argc, char** argv) {
              << "\t\t1 - Result only" << endl << "\t\t2 - The above plus iteration information" << endl
              << "\t\t3 - The above plus input " << endl << "\t\t4 - The above plus transformed matrix" << endl
              << endl << "\tInitialization specification: " << endl << "\t\t1 - All 1s" << endl
-             << "\t\t2 - Random numbers" << endl;
+             << "\t\t2 - Random numbers" << endl << "\t\t3 - Guess" << endl;
         return 0;
     }
 
