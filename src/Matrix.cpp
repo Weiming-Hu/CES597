@@ -19,6 +19,10 @@
 #include <ctime>
 #endif
 
+#ifdef _USE_MPI
+#include "mpi.h"
+#endif
+
 using namespace std;
 static const double _ZERO_LIMIT = 1.0e-9;
 
@@ -311,37 +315,90 @@ operator-(const Matrix & lhs, const Matrix & rhs) {
     return (mat_minus);
 }
 
+#ifdef _USE_MPI
 Matrix
 operator*(const Matrix & lhs, const Matrix & rhs) {
+    // MPI version of matrix multiplication
 
     Matrix mat_mul(0, 0);
 
-        if (lhs.ncols_ != rhs.nrows_) {
-            throw runtime_error("Matrices do not have the correct shape.");
-        }
+    if (lhs.ncols_ != rhs.nrows_) {
+        throw runtime_error("Matrices do not have the correct shape.");
+    }
 
-        size_t mid = lhs.ncols_;
-        size_t nrows = lhs.nrows_;
-        size_t ncols = rhs.ncols_;
+    size_t mid = lhs.ncols_;
+    size_t nrows = lhs.nrows_;
+    size_t ncols = rhs.ncols_;
 
-        mat_mul.resize(nrows, ncols);
+    mat_mul.resize(nrows, ncols);
 
-        double sum = 0.0;
-        for (size_t i = 0; i < nrows; i++) {
-            for (size_t j = 0; j < ncols; j++) {
-                sum = 0.0;
-                for (size_t k = 0; k < mid; k++) {
-                    sum += lhs[i][k] * rhs[k][j];
-                }
-                mat_mul[i][j] = sum;
+    double sum = 0.0;
+    for (size_t i = 0; i < nrows; i++) {
+        for (size_t j = 0; j < ncols; j++) {
+            sum = 0.0;
+            for (size_t k = 0; k < mid; k++) {
+                sum += lhs[i][k] * rhs[k][j];
             }
+            mat_mul[i][j] = sum;
         }
+    }
 
     return (mat_mul);
 }
+#else
+Matrix
+operator*(const Matrix & lhs, const Matrix & rhs) {
+    // Serial version of matrix multiplication
+
+    Matrix mat_mul(0, 0);
+
+    if (lhs.ncols_ != rhs.nrows_) {
+        throw runtime_error("Matrices do not have the correct shape.");
+    }
+
+    size_t mid = lhs.ncols_;
+    size_t nrows = lhs.nrows_;
+    size_t ncols = rhs.ncols_;
+
+    mat_mul.resize(nrows, ncols);
+
+    double sum = 0.0;
+    for (size_t i = 0; i < nrows; i++) {
+        for (size_t j = 0; j < ncols; j++) {
+            sum = 0.0;
+            for (size_t k = 0; k < mid; k++) {
+                sum += lhs[i][k] * rhs[k][j];
+            }
+            mat_mul[i][j] = sum;
+        }
+    }
+
+    return (mat_mul);
+}
+#endif
 
 ostream &
 operator<<(ostream & os, const Matrix & mat) {
     mat.print(os);
     return (os);
 }
+
+#ifdef _USE_MPI
+int Matrix::_MPI_rank = -1;
+int Matrix::_MPI_size = -1;
+
+void
+Matrix::_MPI_start() {
+    MPI_init(NULL, NULL);
+    MPI_Comm_size(MPI_COMM_WORLD, &_MPI_size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &_MPI_rank);
+    return;
+}
+
+void
+Matrix::_MPI_end() {
+    MPI_Finalize();    
+    return;
+}
+#endif
+

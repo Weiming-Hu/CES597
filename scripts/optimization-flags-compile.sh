@@ -1,4 +1,14 @@
 #!/bin/bash
+
+# Whether this script is run in the correct directory
+FILE="CMakeLists.txt"
+if [ -f $FILE ]; then
+   echo "Correct directory: the script is run in the same directory with CMakeLists.txt."
+else
+   echo "Wrong directory: the script should be run in the same directory with CMakeLists.txt."
+   exit 1
+fi
+
 rm -rf output output-profile-optimization build*
 mkdir output-profile-optimization
 
