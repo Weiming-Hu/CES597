@@ -2,6 +2,15 @@
 cd output-profile-optimization
 times=10
 
+# Whether this script is run in the correct directory
+FILE="CMakeLists.txt"
+if [ -f $FILE ]; then
+   echo "Correct directory: the script is run in the same directory with CMakeLists.txt."
+else
+   echo "Wrong directory: the script should be run in the same directory with CMakeLists.txt."
+   exit 1
+fi
+
 rm profile_time_gauss_random.csv
 echo "50,100,250,500,750,1000,1100,1200,1300" >> profile_time_gauss_random.csv
 
