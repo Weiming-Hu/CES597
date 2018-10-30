@@ -15,6 +15,9 @@ endif (${PROFILE_TIME})
 if (${USE_MPI})
     add_definitions(-D_USE_MPI)
     message(STATUS "Build programs with MPI")
+    find_package(MPI REQUIRED)
+    include_directories(${MPI_INCLUDE_PATH})
+    message(STATUS "Include MPI hear path: ${MPI_INCLUDE_PATH}")
 endif (${USE_MPI})
 
 if (CMAKE_BUILD_TYPE)
@@ -36,6 +39,11 @@ set (Matrix_SOURCES "src/Matrix.cpp")
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/src")
 #add_library (Matrix SHARED ${Matrix_SOURCES})
 add_library (Matrix STATIC ${Matrix_SOURCES})
+
+if (${USE_MPI})
+    target_link_libraries(Matrix ${MPI_LIBRARIES})
+endif (${USE_MPI})
+
 set_target_properties(Matrix
     PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${COMMON_OUTPUT_DIR}/lib")
 
