@@ -389,7 +389,7 @@ int Matrix::_MPI_size = -1;
 
 void
 Matrix::_MPI_start() {
-    MPI_init(NULL, NULL);
+    MPI_Init(NULL, NULL);
     MPI_Comm_size(MPI_COMM_WORLD, &_MPI_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &_MPI_rank);
     return;
