@@ -28,7 +28,8 @@ file(MAKE_DIRECTORY ${COMMON_OUTPUT_DIR})
 # Add the library Matrix
 set (Matrix_SOURCES "Matrix.cpp")
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
-add_library (Matrix SHARED ${Matrix_SOURCES})
+#add_library (Matrix SHARED ${Matrix_SOURCES})
+add_library (Matrix STATIC ${Matrix_SOURCES})
 set_target_properties(Matrix
     PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${COMMON_OUTPUT_DIR}/lib")
 
