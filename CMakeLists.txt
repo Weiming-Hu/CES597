@@ -5,11 +5,17 @@ project (Matrix)
 set (CMAKE_CXX_STANDARD 11)
 
 option(PROFILE_TIME "Build programs with profiling functions" OFF)
+option(USE_MPI "Build programs with USE_MPI" OFF)
 
 if (${PROFILE_TIME})
     add_definitions(-D_PROFILE_TIME)
     message(STATUS "Build programs with profiling functions")
 endif (${PROFILE_TIME})
+
+if (${USE_MPI})
+    add_definitions(-D_USE_MPI)
+    message(STATUS "Build programs with MPI")
+endif (${USE_MPI})
 
 if (CMAKE_BUILD_TYPE)
     if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
