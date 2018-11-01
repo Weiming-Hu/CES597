@@ -8,23 +8,28 @@
 
 #include "Matrix.h"
 
+#include <cstring>
 #include <fstream>
 #include <cmath>
 #include <sstream>
 #include <vector>
 #include <numeric>
 #include <iomanip>
+#include <algorithm>
+#include <exception>
 
 #ifdef _PROFILE_TIME
 #include <ctime>
 #endif
 
-#ifdef _USE_MPI
-#include "mpi.h"
-#endif
-
 using namespace std;
 static const double _ZERO_LIMIT = 1.0e-9;
+
+void deleteContinuousMatrix(struct continuousMatrix *cm) {
+    free(cm->data);
+    free(cm);
+    return;
+}
 
 Matrix::Matrix() {
 }
@@ -122,7 +127,6 @@ Matrix::readMatrix(const std::string & csv_file) {
 
     return (true);
 }
-
 
 Matrix
 Matrix::inverse() {
@@ -257,6 +261,55 @@ Matrix::print(ostream & os) const {
     os << endl;
 }
 
+struct continuousMatrix *
+Matrix::toContinuousMatrix() const {
+    if (this->nrows() == 0 || this->ncols() == 0) throw runtime_error(
+            "Error: Empty matrix is not allowed to be converted to a continuous matrix");
+    
+    struct continuousMatrix *cm;
+    cm = (struct continuousMatrix *) malloc(sizeof(struct continuousMatrix));
+    
+    cm->nrows = this->nrows();
+    cm->ncols = this->ncols();
+    cm->length = cm->nrows * cm->ncols;
+    cm->data = (double *) malloc(cm->length * sizeof(double));
+    
+    int values_copied = 0;
+    
+    auto row_copy = [cm, &values_copied](const vector<double> & row) {
+        copy(row.begin(), row.end(), cm->data + values_copied);
+        values_copied += row.size();
+    };
+    
+    for_each(this->begin(), this->end(), row_copy);
+    
+    if (values_copied != cm->length) throw runtime_error(
+            "Error: Matrix does not have regular shape.");
+    
+    return (cm);
+}
+
+void
+Matrix::fromContinuousMatrix(struct continuousMatrix * cm) {
+    if (cm->nrows == 0 || cm->ncols == 0) throw runtime_error(
+            "Error: The Continuous matrix has zero rows or columns.");
+    
+    this->resize(cm->nrows, cm->ncols);
+    
+    int values_copied = 0;
+    
+    auto row_copy = [cm, &values_copied](vector<double> & row) {
+        copy(cm->data + values_copied, cm->data + values_copied + row.size(), row.begin());
+        values_copied += row.size();
+    };
+    
+    for_each(this->begin(), this->end(), row_copy);
+    
+    return;
+}
+
+
+
 Matrix &
         Matrix::operator=(const Matrix & rhs) {
     if (this != &rhs) {
@@ -315,37 +368,6 @@ operator-(const Matrix & lhs, const Matrix & rhs) {
     return (mat_minus);
 }
 
-#ifdef _USE_MPI
-Matrix
-operator*(const Matrix & lhs, const Matrix & rhs) {
-    // MPI version of matrix multiplication
-
-    Matrix mat_mul(0, 0);
-
-    if (lhs.ncols_ != rhs.nrows_) {
-        throw runtime_error("Matrices do not have the correct shape.");
-    }
-
-    size_t mid = lhs.ncols_;
-    size_t nrows = lhs.nrows_;
-    size_t ncols = rhs.ncols_;
-
-    mat_mul.resize(nrows, ncols);
-
-    double sum = 0.0;
-    for (size_t i = 0; i < nrows; i++) {
-        for (size_t j = 0; j < ncols; j++) {
-            sum = 0.0;
-            for (size_t k = 0; k < mid; k++) {
-                sum += lhs[i][k] * rhs[k][j];
-            }
-            mat_mul[i][j] = sum;
-        }
-    }
-
-    return (mat_mul);
-}
-#else
 Matrix
 operator*(const Matrix & lhs, const Matrix & rhs) {
     // Serial version of matrix multiplication
@@ -375,30 +397,10 @@ operator*(const Matrix & lhs, const Matrix & rhs) {
 
     return (mat_mul);
 }
-#endif
 
 ostream &
 operator<<(ostream & os, const Matrix & mat) {
     mat.print(os);
     return (os);
 }
-
-#ifdef _USE_MPI
-int Matrix::_MPI_rank = -1;
-int Matrix::_MPI_size = -1;
-
-void
-Matrix::_MPI_start() {
-    MPI_Init(NULL, NULL);
-    MPI_Comm_size(MPI_COMM_WORLD, &_MPI_size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &_MPI_rank);
-    return;
-}
-
-void
-Matrix::_MPI_end() {
-    MPI_Finalize();    
-    return;
-}
-#endif
 
