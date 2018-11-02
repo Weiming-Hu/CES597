@@ -121,6 +121,10 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
     // The iteration scheme is x_k+1 = D^-1 * (b - R * x_k)
     //
 
+#ifdef _PROFILE_TIME
+    clock_t time_start = clock();
+#endif
+
     // D is the diagonal matrix
     Matrix D(A.nrows(), A.ncols());
     for (size_t i = 0; i < D.nrows(); i++) D[i][i] = A[i][i];
@@ -168,6 +172,10 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
             << "Initialized solution: " << solution_new << endl;
     }
 
+#ifdef _PROFILE_TIME
+    clock_t time_end_of_preprocessing = clock();
+#endif
+
     for (size_t i_it = 0; i_it < max_it && resid_metric > small_resid; i_it++) {
 
         solution = solution_new;
@@ -184,19 +192,44 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
         }
     }
 
-    if (!A.checkDominant()) {
-        cout << "Warning: Input matrix is not diagonally dominant."
-                << " Jacobi Method might not converge." << endl;
+#ifdef _PROFILE_TIME
+    clock_t time_end_of_loop = clock();
+#endif
+
+    if (resid_metric > small_resid) {
+        cout << " Warning: Jacobi Method did not converge." << endl;
+
+        if (!A.checkDominant()) {
+            cout << "Warning: Input matrix is not diagonally dominant.";
+        }
     }
 
     if (verbose >= 4) {
         cout << "The iteration matrix D_inv * R is: " << D_inv * R << endl;
     }
     
+#ifdef _PROFILE_TIME
+    clock_t time_end = clock();
+
+    double duration_total = (time_end - time_start) / (double) CLOCKS_PER_SEC;
+    double duration_preprocessing = (time_end_of_preprocessing - time_start) / (double) CLOCKS_PER_SEC;
+    double duration_loop = (time_end_of_loop - time_end_of_preprocessing) / (double) CLOCKS_PER_SEC;
+    double duration_postprocessing = (time_end - time_end_of_loop) / (double) CLOCKS_PER_SEC;
+
+    cout << "(Jacobi) Preprocessing: " << duration_preprocessing << "s (" << 100 * duration_preprocessing / duration_total << "%)" << endl
+        << "(Jacobi) Loop: " << duration_loop << "s (" << 100 * duration_loop / duration_total << "%)" << endl
+        << "(Jacobi) Postprocessing: " << duration_postprocessing << "s (" << 100 * duration_postprocessing / duration_total << "%)" << endl
+        << "(Jacobi) Total time: " << duration_total << "s (100%)" << endl;
+#endif
+
     return;
 }
 
 int main(int argc, char** argv) {
+
+#ifdef _PROFILE_TIME
+    clock_t time_start = clock();
+#endif
 
     if (argc != 6 && argc != 7) {
         cout << "iterativeSolver <Jacobi,J|Gauss,G> <matrix csv> <vector csv> <maximum iteration> <initilization> [A verbose flag integer]"
@@ -225,7 +258,7 @@ int main(int argc, char** argv) {
     size_t initialize_func = atoi(argv[5]);
 
 #ifdef _PROFILE_TIME
-    clock_t time_start = clock();
+    clock_t time_end_of_read = clock();
 #endif
 
     // Define solution
@@ -244,14 +277,6 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-#ifdef _PROFILE_TIME
-    clock_t time_end = clock();
-
-    double duration_total = (time_end - time_start) / (double) CLOCKS_PER_SEC;
-    cout << setprecision(4) << "Total time for the iterative method: "
-         << duration_total << "s" << endl;
-#endif
-
     if (verbose >= 1) {
         if (function_str == "Jacobi" || function_str == "J") {
             cout << "Result from Jacobi x is " << endl << solution << endl;
@@ -259,6 +284,17 @@ int main(int argc, char** argv) {
             cout << "Result from Gauss-Seidel x is " << endl << solution << endl;
         }
     }
+
+#ifdef _PROFILE_TIME
+    clock_t time_end = clock();
+
+    double duration_total = (time_end - time_start) / (double) CLOCKS_PER_SEC;
+    double duration_reading = (time_end_of_read - time_start) / (double) CLOCKS_PER_SEC;
+    double duration_function = (time_end - time_end_of_read) / (double) CLOCKS_PER_SEC;
+    cout << "Reading data: " << duration_reading << "s (" << 100 * duration_reading / duration_total << "%)" << endl
+        << "Iterative method: " << duration_function << "s (" << 100 * duration_function / duration_total << "%)" << endl
+        << "Total time: " << duration_total << "s (100%)" << endl;
+#endif
 
     return 0;
 }

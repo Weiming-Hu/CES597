@@ -244,7 +244,7 @@ Matrix::inverse() {
     double duration_total = (time_backward - time_start) /(double) CLOCKS_PER_SEC;
 
     cout << setprecision(4) << "-----------------------------------" << endl
-         << "Time profiling for the matrix inverse function:" << endl
+         << "Time profiling for matrix inversion:" << endl
          << "Forward elimination: " << duration_forward << "s (" << duration_forward / duration_total * 100 << "%)" << endl
          << "Backward elimination: " << duration_backward << "s (" << duration_backward / duration_total * 100 << "%)" << endl
          << "Inverse function total: " << duration_total << "s (" << duration_total / duration_total << ")" << endl
