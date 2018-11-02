@@ -19,8 +19,8 @@
 #include <ctime>
 #endif
 
-#ifdef _USE_MPI
-#include "mpi.h"
+#ifdef _OPENMP
+#include <omp.h>
 #endif
 
 using namespace std;
@@ -69,6 +69,7 @@ Matrix::ncols() const {
 bool
 Matrix::checkDominant() const {
     double sum;
+
     for (size_t i = 0; i < nrows_; i++) {
         sum = accumulate((*this)[i].begin(), (*this)[i].end(), 0.0, [](
                 double lhs, double rhs) {
@@ -110,13 +111,16 @@ Matrix::readMatrix(const std::string & csv_file) {
         }
     }
 
-    size_t index = 0;
     size_t ncols = tmp_vec.size() / nrows;
     this->resize(nrows, ncols);
 
+#if defined(_OPENMP)
+#pragma omp parallel for default(none) schedule(static) collapse(2) \
+shared(nrows, ncols, tmp_vec)
+#endif
     for (size_t i = 0; i < nrows; i++) {
-        for (size_t j = 0; j < ncols; j++, index++) {
-            (*this)[i][j] = tmp_vec[index];
+        for (size_t j = 0; j < ncols; j++) {
+            (*this)[i][j] = tmp_vec[i * ncols + j];
         }
     }
 
@@ -145,16 +149,21 @@ Matrix::inverse() {
     // Use Gaussian Elimination to solve the system
     //
     // Forward elimination
+#if defined(_OPENMP)
+#pragma omp parallel default(none) shared(nsize, mat, mat_inv)
+#endif
     for (size_t k = 0; k < nsize - 1; k++) {
-        for (size_t i = k + 1; i < nsize; i++) {
-            
-            if (abs(mat[k][k]) < _ZERO_LIMIT) {
-                ostringstream message;
-                message << "0 occurs (" << mat[k][k]
-                        << "). Please use row permutation.";
-                throw runtime_error(message.str());
-            }
+        if (abs(mat[k][k]) < _ZERO_LIMIT) {
+            ostringstream message;
+            message << "0 occurs (" << mat[k][k]
+                << "). Please use row permutation.";
+            throw runtime_error(message.str());
+        }
 
+#if defined(_OPENMP)
+#pragma omp for schedule(static)
+#endif
+        for (size_t i = k + 1; i < nsize; i++) {
             double coef = mat[i][k] / mat[k][k];
 
             for (size_t j = k; j < nsize; j++) {
@@ -172,6 +181,9 @@ Matrix::inverse() {
 #endif
     
     // Change the proceeding of each line to 1
+#if defined(_OPENMP)
+#pragma omp parallel default(none) shared(nsize, mat, mat_inv)
+#endif
     for (size_t i = 0; i < nsize; i++) {
 
         if (abs(mat[i][i]) < _ZERO_LIMIT) {
@@ -181,17 +193,30 @@ Matrix::inverse() {
         }
         double coef = mat[i][i];
 
+#if defined(_OPENMP)
+#pragma omp for schedule(static)
+#endif
         for (size_t j = i; j < nsize; j++) {
             mat[i][j] /= coef;
         }
 
+#if defined(_OPENMP)
+#pragma omp for schedule(static)
+#endif
         for (size_t j = 0; j < nsize; j++) {
             mat_inv[i][j] /= coef;
         }
     }
 
     // Backward elimination
+#if defined(_OPENMP)
+#pragma omp parallel default(none) shared(nsize, mat_inv, mat) 
+#endif
     for (int i = nsize - 2; i >= 0; i--) {
+
+#if defined(_OPENMP)
+#pragma omp for schedule(static)
+#endif
         for (int j = nsize - 1; j > i; j--) {
 
             for (int m = 0; m < nsize; m++) {
@@ -226,8 +251,12 @@ Matrix::transpose() {
     Matrix mat_t(ncols_, nrows_);
     
     // Assign values
-    for (size_t i = 0; i < nrows_; i++) {
-        for (size_t j = 0; j < ncols_; j++) {
+#if defined(_OPENMP)
+#pragma omp parallel for default(none) schedule(static) collapse(2) \
+shared(mat_t) 
+#endif
+    for (size_t i = 0; i < this->nrows_; i++) {
+        for (size_t j = 0; j < this->ncols_; j++) {
             mat_t[j][i] = (*this)[i][j];
         }
     }
@@ -286,6 +315,10 @@ operator+(const Matrix & lhs, const Matrix & rhs) {
 
         mat_add.resize(lhs.nrows_, lhs.ncols_);
 
+#if defined(_OPENMP)
+#pragma omp parallel for default(none) schedule(static) collapse(2) \
+shared(lhs, mat_add, rhs) 
+#endif
         for (size_t i = 0; i < lhs.nrows_; i++) {
             for (size_t j = 0; j < lhs.ncols_; j++) {
                 mat_add[i][j] = lhs[i][j] + rhs[i][j];
@@ -306,6 +339,10 @@ operator-(const Matrix & lhs, const Matrix & rhs) {
         
         mat_minus.resize(lhs.nrows_, lhs.ncols_);
 
+#if defined(_OPENMP)
+#pragma omp parallel for default(none) schedule(static) collapse(2) \
+shared(lhs, rhs, mat_minus) 
+#endif
         for (size_t i = 0; i < lhs.nrows_; i++) {
             for (size_t j = 0; j < lhs.ncols_; j++) {
                 mat_minus[i][j] = lhs[i][j] - rhs[i][j];
@@ -315,37 +352,6 @@ operator-(const Matrix & lhs, const Matrix & rhs) {
     return (mat_minus);
 }
 
-#ifdef _USE_MPI
-Matrix
-operator*(const Matrix & lhs, const Matrix & rhs) {
-    // MPI version of matrix multiplication
-
-    Matrix mat_mul(0, 0);
-
-    if (lhs.ncols_ != rhs.nrows_) {
-        throw runtime_error("Matrices do not have the correct shape.");
-    }
-
-    size_t mid = lhs.ncols_;
-    size_t nrows = lhs.nrows_;
-    size_t ncols = rhs.ncols_;
-
-    mat_mul.resize(nrows, ncols);
-
-    double sum = 0.0;
-    for (size_t i = 0; i < nrows; i++) {
-        for (size_t j = 0; j < ncols; j++) {
-            sum = 0.0;
-            for (size_t k = 0; k < mid; k++) {
-                sum += lhs[i][k] * rhs[k][j];
-            }
-            mat_mul[i][j] = sum;
-        }
-    }
-
-    return (mat_mul);
-}
-#else
 Matrix
 operator*(const Matrix & lhs, const Matrix & rhs) {
     // Serial version of matrix multiplication
@@ -362,10 +368,13 @@ operator*(const Matrix & lhs, const Matrix & rhs) {
 
     mat_mul.resize(nrows, ncols);
 
-    double sum = 0.0;
+#if defined(_OPENMP)
+#pragma omp parallel for default(none) schedule(static) collapse(2) \
+shared(nrows, ncols, mat_mul, lhs, rhs, mid)
+#endif
     for (size_t i = 0; i < nrows; i++) {
         for (size_t j = 0; j < ncols; j++) {
-            sum = 0.0;
+            double sum = 0.0;
             for (size_t k = 0; k < mid; k++) {
                 sum += lhs[i][k] * rhs[k][j];
             }
@@ -375,30 +384,9 @@ operator*(const Matrix & lhs, const Matrix & rhs) {
 
     return (mat_mul);
 }
-#endif
 
 ostream &
 operator<<(ostream & os, const Matrix & mat) {
     mat.print(os);
     return (os);
 }
-
-#ifdef _USE_MPI
-int Matrix::_MPI_rank = -1;
-int Matrix::_MPI_size = -1;
-
-void
-Matrix::_MPI_start() {
-    MPI_init(NULL, NULL);
-    MPI_Comm_size(MPI_COMM_WORLD, &_MPI_size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &_MPI_rank);
-    return;
-}
-
-void
-Matrix::_MPI_end() {
-    MPI_Finalize();    
-    return;
-}
-#endif
-

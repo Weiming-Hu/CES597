@@ -20,6 +20,18 @@ if (${USE_MPI})
     message(STATUS "Include MPI hear path: ${MPI_INCLUDE_PATH}")
 endif (${USE_MPI})
 
+# find OpenMP
+find_package (OpenMP)
+if (${OPENMP_FOUND})
+    message(STATUS "Using OpenMP ${OpenMP_CXX_FLAGS}")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+else (${OPENMP_FOUND})
+    message (WARNING "No OpenMP support found for the compiler: ${CMAKE_CXX_COMPILER}
+    The process goes on, but the executable won't support multi-threading.
+    SUGGESTION: specify another compiler using CC and CXX. CC=[C compiler] CXX=[CXX compiler] cmake ..")
+endif (${OPENMP_FOUND})
+
 if (CMAKE_BUILD_TYPE)
     if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         message(STATUS "Add definitions for debugging")
