@@ -52,10 +52,6 @@ include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/src")
 #add_library (Matrix SHARED ${Matrix_SOURCES})
 add_library (Matrix STATIC ${Matrix_SOURCES})
 
-if (${USE_MPI})
-    target_link_libraries(Matrix ${MPI_LIBRARIES})
-endif (${USE_MPI})
-
 set_target_properties(Matrix
     PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${COMMON_OUTPUT_DIR}/lib")
 
@@ -75,5 +71,27 @@ foreach (PROGRAM_NAME IN LISTS PROGRAM_NAMES)
 
     add_dependencies(${PROGRAM_NAME} Matrix)
 endforeach(PROGRAM_NAME IN PROGRAM_NAMES)
+
+if (${USE_MPI})
+    add_definitions(-D_USE_MPI)
+    message(STATUS "Build parallel Jacobi method with MPI")
+    find_package(MPI REQUIRED)
+    include_directories(SYSTEM ${MPI_INCLUDE_PATH})
+    message(STATUS "Include MPI head path: ${MPI_INCLUDE_PATH}")
+    
+    message(STATUS "building program parallelJacobi")
+    add_executable (parallelJacobi "${CMAKE_CURRENT_SOURCE_DIR}/src/parallelJacobi.cpp")
+    target_link_libraries (parallelJacobi Matrix ${MPI_C_LIBRARIES} ${MPI_CXX_LIBRARIES})
+
+    set_target_properties(parallelJacobi
+        PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${COMMON_OUTPUT_DIR}/bin")
+
+    if (EXE_SUFFIX)
+        set_target_properties(parallelJacobi
+            PROPERTIES SUFFIX ${EXE_SUFFIX})
+    endif (EXE_SUFFIX)
+
+    add_dependencies(parallelJacobi Matrix)
+endif (${USE_MPI})
 
 message (STATUS "compile flags are ${CMAKE_CXX_FLAGS}")

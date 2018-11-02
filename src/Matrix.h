@@ -12,6 +12,15 @@
 #include <vector>
 #include <iostream>
 
+struct continuousMatrix {
+    int nrows;
+    int ncols;
+    int length;
+    double *data;
+};
+
+void deleteContinuousMatrix(struct continuousMatrix * p_cm);
+
 class Matrix : public std::vector< std::vector<double> > {
 public:
     Matrix();
@@ -38,6 +47,12 @@ public:
 
     // Print functions
     void print(std::ostream &) const;
+    
+    // Convert to a matrix with continuous memory
+    struct continuousMatrix *toContinuousMatrix() const;
+    
+    // Generate from a matrix with continuous memory
+    void fromContinuousMatrix(struct continuousMatrix * p_cm);
     
     // Overload operators
     Matrix & operator=(const Matrix & rhs);
