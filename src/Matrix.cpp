@@ -202,6 +202,7 @@ Matrix::inverse() {
         double coef = mat[i][i];
 
 #if defined(_OPENMP)
+#pragma omp barrier
 #pragma omp for schedule(static)
 #endif
         for (size_t j = i; j < nsize; j++) {
@@ -215,7 +216,7 @@ Matrix::inverse() {
             mat_inv[i][j] /= coef;
         }
     }
-
+    
     // Backward elimination
 #if defined(_OPENMP)
 #pragma omp parallel default(none) shared(nsize, mat_inv, mat) 
