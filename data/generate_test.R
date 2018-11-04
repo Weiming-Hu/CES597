@@ -17,7 +17,7 @@
 #
 
 # size <- readline("Size: ")
-size <- 1300
+size <- 400
 
 A <- matrix(sample(size*size)/size, nrow = size, ncol = size)
 b <- sample(size)
