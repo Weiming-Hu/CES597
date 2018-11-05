@@ -19,23 +19,16 @@ Please see [LICENSE.txt](https://github.com/Weiming-Hu/CSE597/blob/master/LICENS
 
 An overview of the files is provided below.
 
-- `R/` contains the R scripts for data analyses and visualization.
-- `data/` contains the test data sets and the R script to generate them.
-- `reports/` contains the continuous reports for the project. The sources can be found in the [Write-Up](#write-up) section below.
+- `R/` contains the R scripts for data analysis and visualization.
+- `data/` contains the csv data files and the R script used to generate the data files.
+- `reports/` contains the progress reports in pdf format.
+- `scripts/` contains miscellaneous scripts for compiling and profiling. They are organized by progress report number.
+- `poster/` contains the project poster files.
+- `src/` contains the header and source files for the library Matrix and the several utilities.
 - `.gitignore` is the file specifying which files should be ignored in Git.
 - `CMakeLists.txt` guides CMake to generate a make file. Please see README.md for detailed usage.
 - `LICENSE.txt` is the MIT license.
-- `Matrix.cpp` is the source file for Matrix library.
-- `Matrix.h` is the header file for Matrix library.
 - `README.md` contains basic information for the repository and detailed information for how to compile and reproduce the results.
-- `directSolver.cpp` is the source file for the direct solver.
-- `iterativeSolver.cpp` is the source file the iterative solver.
-- `optimization-flags-compile.sh` is the bash script to compile solvers with different optimization flags and to organize them in a particular folder.
-- `optimization-flags-test-direct.sh` is the bash script to test the direct solver with different optimization flags.
-- `optimization-flags-test-gauss.sh` is the bash script to test the Gauss-Seidel iterative solver with different optimization flags.
-- `profiling-time-direct.sh` is the bash script to profile the direct solver.
-- `profiling-time-guass.sh` is the bash script to profile the iterative solver.
-- `testMatrix.cpp` is the source file for testing Matrix library.
 
 ## Abstract
 
