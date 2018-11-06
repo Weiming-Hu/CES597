@@ -247,6 +247,7 @@ shared(max_it, small_resid, D_inv, b, R, A, verbose, solution_new, resids, solut
                     cout << "Iteration " << i_it + 1 << " residual: " << resid_metric << endl;
                 }
             }
+#pragma omp barrier
         }
     }
 

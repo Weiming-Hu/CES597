@@ -1,0 +1,24 @@
+
+real	0m31.644s
+user	0m31.439s
+sys	0m0.110s
+
+real	0m25.164s
+user	0m49.856s
+sys	0m0.130s
+
+real	0m22.132s
+user	1m27.523s
+sys	0m0.189s
+
+real	0m21.864s
+user	2m52.758s
+sys	0m0.292s
+
+real	0m23.701s
+user	6m14.804s
+sys	0m0.485s
+
+real	0m42.941s
+user	22m25.811s
+sys	0m1.578s

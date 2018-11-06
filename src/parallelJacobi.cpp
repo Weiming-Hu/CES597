@@ -317,11 +317,19 @@ int main(int argc, char** argv) {
     clock_t time_start = clock();
 #endif
 
+#ifdef _WALL_TIME
+    double wtime_start = MPI_Wtime();
+#endif
+
     // Define solution
     Matrix solution;
 
     // Read function name
     runJacobi(A, b, solution, max_it, initialize_func, verbose);
+
+#ifdef _WALL_TIME
+    double wtime_end = MPI_Wtime();
+#endif
 
 #ifdef _PROFILE_TIME
     clock_t time_end = clock();
@@ -330,6 +338,14 @@ int main(int argc, char** argv) {
         double duration_total = (time_end - time_start) / (double) CLOCKS_PER_SEC;
         cout << setprecision(4) << "Total time for the iterative method: "
                 << duration_total << "s" << endl;
+    }
+#endif
+
+#ifdef _WALL_TIME
+    if (world_rank == 0) {
+        double wduration_total = wtime_end - wtime_start;
+        cout << setprecision(4) << "Total wall time for the iterative method: "
+                << wduration_total << "s" << endl;
     }
 #endif
 

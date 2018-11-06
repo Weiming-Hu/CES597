@@ -8,7 +8,7 @@ setwd("~/github/LinearSystemSolvers/scripts/report2/")
 output.data.file <- 'profile-openmp-jacobi-with-size.RData'
 # data.sizes <- c(50, 100, 150, 200, 250, 300, 350, 400)
 data.size <- 250
-repeat.times <- 10
+repeat.times <- 5
 num.cores <- c(1, 2, 4, 8, 16, 32)
 
 if (!file.exists(output.data.file)) {
