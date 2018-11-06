@@ -341,8 +341,6 @@ Matrix::fromContinuousMatrix(struct continuousMatrix * cm) {
     return;
 }
 
-
-
 Matrix &
         Matrix::operator=(const Matrix & rhs) {
     if (this != &rhs) {

@@ -70,8 +70,9 @@ public:
         mat_add.resize(lhs.nrows_, lhs.ncols_);
 
 #if defined(_OPENMP)
-#pragma omp parallel for default(none) schedule(static) collapse(2) \
-        shared(lhs, mat_add, rhs) 
+//#pragma omp parallel for default(none) schedule(static) collapse(2) \
+//        shared(lhs, mat_add, rhs) 
+#pragma omp for schedule(static) collapse(2)
 #endif
         for (size_t i = 0; i < lhs.nrows_; i++) {
             for (size_t j = 0; j < lhs.ncols_; j++) {
@@ -93,8 +94,9 @@ public:
         mat_minus.resize(lhs.nrows_, lhs.ncols_);
 
 #if defined(_OPENMP)
-#pragma omp parallel for default(none) schedule(static) collapse(2) \
-        shared(lhs, rhs, mat_minus) 
+//#pragma omp parallel for default(none) schedule(static) collapse(2) \
+//        shared(lhs, rhs, mat_minus) 
+#pragma omp for schedule(static) collapse(2)
 #endif
         for (size_t i = 0; i < lhs.nrows_; i++) {
             for (size_t j = 0; j < lhs.ncols_; j++) {
@@ -120,8 +122,9 @@ public:
         mat_mul.resize(nrows, ncols);
 
 #if defined(_OPENMP)
-#pragma omp parallel for default(none) schedule(static) collapse(2) \
-        shared(nrows, ncols, mat_mul, lhs, rhs, mid)
+//#pragma omp parallel for default(none) schedule(static) collapse(2) \
+//        shared(nrows, ncols, mat_mul, lhs, rhs, mid)
+#pragma omp for schedule(static) collapse(2)
 #endif
         for (size_t i = 0; i < nrows; i++) {
             for (size_t j = 0; j < ncols; j++) {

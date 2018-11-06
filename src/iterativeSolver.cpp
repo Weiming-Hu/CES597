@@ -190,20 +190,63 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
 #ifdef _WALL_TIME
     double wtime_end_of_preprocessing = omp_get_wtime();
 #endif
+    resids.resize(solution_new.nrows(), 1);
 
-    for (size_t i_it = 0; i_it < max_it && resid_metric > small_resid; i_it++) {
+#if defined(_OPENMP)
+#pragma omp parallel default(none) \
+shared(max_it, small_resid, D_inv, b, R, A, verbose, solution_new, resids, solution, resid_metric, cout)
+#endif
+    {
+        int thread_num = omp_get_thread_num();
+        for (size_t i_it = 0; i_it < max_it && resid_metric > small_resid; i_it++) {
 
-        solution = solution_new;
-        solution_new = D_inv * (b - R * solution);
+            if (thread_num == 0) {
+                solution = solution_new;
+            }
 
-        resids = A * solution_new - b;
-        resid_metric = accumulate(resids.begin(), resids.end(), 0.0, [](
-                const double lhs, const vector<double> rhs) {
-            return (lhs + abs(rhs[0]));
-        });
+#pragma omp barrier
+#pragma omp for schedule(static)
+            for (int i_row = 0; i_row < solution_new.nrows(); i_row++) {
 
-        if (verbose >= 2) {
-            cout << "Iteration " << i_it + 1 << " residual: " << resid_metric << endl;
+                double sum = 0.0;
+                for (int i_col = 0; i_col < R.ncols(); i_col++) {
+                    sum += R[i_row][i_col] * solution[i_col][0];
+                }
+                solution_new[i_row][0] = b[i_row][0] - sum;
+            }
+#pragma omp barrier
+#pragma omp for schedule(static)
+            for (int i_row = 0; i_row < solution_new.nrows(); i_row++) {
+                double sum = 0.0;
+                auto solution_old = solution_new;
+                for (int i_col = 0; i_col < D_inv.ncols(); i_col++) {
+                    sum += D_inv[i_row][i_col] * solution_old[i_col][0];
+                }
+                solution_new[i_row][0] = sum;
+            }
+            //solution_new = D_inv * (b - R * solution);
+#pragma omp barrier
+#pragma omp for schedule(static)
+            for (int i_row = 0; i_row < resids.nrows(); i_row++) {
+                double sum = 0.0;
+                for (int i_col = 0; i_col < R.ncols(); i_col++) {
+                    sum += A[i_row][i_col] * solution_new[i_col][0];
+                }
+                resids[i_row][0] = sum - b[i_row][0];
+            }
+            //resids = A * solution_new - b;
+#pragma omp barrier
+
+            if (thread_num == 0) {
+                resid_metric = accumulate(resids.begin(), resids.end(), 0.0, [](
+                            const double lhs, const vector<double> rhs) {
+                        return (lhs + abs(rhs[0]));
+                        });
+
+                if (verbose >= 2) {
+                    cout << "Iteration " << i_it + 1 << " residual: " << resid_metric << endl;
+                }
+            }
         }
     }
 
