@@ -13,6 +13,13 @@
 #include <cmath>
 #include <ctime>
 
+#ifdef _OPENMP
+#ifdef _WALL_TIME
+#include <omp.h>
+#endif
+#endif
+
+
 using namespace std;
 
 #define _SMALL_VALUE 1.0e-3;
@@ -125,6 +132,10 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
     clock_t time_start = clock();
 #endif
 
+#ifdef _WALL_TIME
+    double wtime_start = omp_get_wtime();
+#endif
+
     // D is the diagonal matrix
     Matrix D(A.nrows(), A.ncols());
     for (size_t i = 0; i < D.nrows(); i++) D[i][i] = A[i][i];
@@ -176,6 +187,10 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
     clock_t time_end_of_preprocessing = clock();
 #endif
 
+#ifdef _WALL_TIME
+    double wtime_end_of_preprocessing = omp_get_wtime();
+#endif
+
     for (size_t i_it = 0; i_it < max_it && resid_metric > small_resid; i_it++) {
 
         solution = solution_new;
@@ -196,6 +211,10 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
     clock_t time_end_of_loop = clock();
 #endif
 
+#ifdef _WALL_TIME
+    double wtime_end_of_loop = omp_get_wtime();
+#endif
+
     if (resid_metric > small_resid) {
         cout << " Warning: Jacobi Method did not converge." << endl;
 
@@ -208,6 +227,10 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
         cout << "The iteration matrix D_inv * R is: " << D_inv * R << endl;
     }
     
+#ifdef _WALL_TIME
+    double wtime_end = omp_get_wtime();
+#endif
+
 #ifdef _PROFILE_TIME
     clock_t time_end = clock();
 
@@ -222,10 +245,27 @@ void runJacobi(const Matrix & A, const Matrix & b, Matrix & solution,
         << "(Jacobi) Total time: " << duration_total << "s (100%)" << endl;
 #endif
 
+#ifdef _WALL_TIME
+
+    double wduration_total = wtime_end - wtime_start;
+    double wduration_preprocessing = wtime_end_of_preprocessing - wtime_start;
+    double wduration_loop = wtime_end_of_loop - wtime_end_of_preprocessing;
+    double wduration_postprocessing = wtime_end - wtime_end_of_loop;
+
+    cout << "(Jacobi) Wall time Preprocessing: " << wduration_preprocessing << "s (" << 100 * wduration_preprocessing / wduration_total << "%)" << endl
+        << "(Jacobi) Wall time Loop: " << wduration_loop << "s (" << 100 * wduration_loop / wduration_total << "%)" << endl
+        << "(Jacobi) Wall time Postprocessing: " << wduration_postprocessing << "s (" << 100 * wduration_postprocessing / wduration_total << "%)" << endl
+        << "(Jacobi) Wall time Total time: " << wduration_total << "s (100%)" << endl;
+#endif
+
     return;
 }
 
 int main(int argc, char** argv) {
+
+#ifdef _WALL_TIME
+    double wtime_start = omp_get_wtime();
+#endif
 
 #ifdef _PROFILE_TIME
     clock_t time_start = clock();
@@ -257,6 +297,10 @@ int main(int argc, char** argv) {
     size_t max_it = atoi(argv[4]);
     size_t initialize_func = atoi(argv[5]);
 
+#ifdef _WALL_TIME
+    double wtime_end_of_read = omp_get_wtime();
+#endif
+
 #ifdef _PROFILE_TIME
     clock_t time_end_of_read = clock();
 #endif
@@ -285,6 +329,10 @@ int main(int argc, char** argv) {
         }
     }
 
+#ifdef _WALL_TIME
+    double wtime_end = omp_get_wtime();
+#endif
+
 #ifdef _PROFILE_TIME
     clock_t time_end = clock();
 
@@ -294,6 +342,16 @@ int main(int argc, char** argv) {
     cout << "Reading data: " << duration_reading << "s (" << 100 * duration_reading / duration_total << "%)" << endl
         << "Iterative method: " << duration_function << "s (" << 100 * duration_function / duration_total << "%)" << endl
         << "Total time: " << duration_total << "s (100%)" << endl;
+#endif
+
+#ifdef _WALL_TIME
+    double wduration_total = wtime_end - wtime_start;
+    double wduration_reading = wtime_end_of_read - wtime_start;
+    double wduration_function = wtime_end - wtime_end_of_read;
+
+    cout << "Wall time Reading data: " << wduration_reading << "s (" << 100 * wduration_reading / wduration_total << "%)" << endl
+        << "Wall time Iterative method: " << wduration_function << "s (" << 100 * wduration_function / wduration_total << "%)" << endl
+        << "Wall time Total time: " << wduration_total << "s (100%)" << endl;
 #endif
 
     return 0;

@@ -5,7 +5,13 @@ project (Matrix)
 set (CMAKE_CXX_STANDARD 11)
 
 option(PROFILE_TIME "Build programs with profiling functions" OFF)
+option(WALL_TIME "Build programs with profiling functions for wall time" OFF)
 option(USE_MPI "Build programs with USE_MPI" OFF)
+
+if (${WALL_TIME})
+    add_definitions(-D_WALL_TIME)
+    message(STATUS "Build programs with profiling functions for wall time")
+endif (${WALL_TIME})
 
 if (${PROFILE_TIME})
     add_definitions(-D_PROFILE_TIME)

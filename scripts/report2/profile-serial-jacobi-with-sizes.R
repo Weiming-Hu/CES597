@@ -2,8 +2,8 @@
 # using data sets with different sizes.
 #
 
-cat("Change the working directory to ~/github/CSE597/scripts/report2/\n")
-setwd("~/github/CSE597/scripts/report2/")
+cat("Change the working directory to ~/github/LinearSystemSolvers/scripts/report2/\n")
+setwd("~/github/LinearSystemSolvers/scripts/report2/")
 
 output.data.file <- 'profile-serial-jacobi-with-sizes.RData'
 data.sizes <- c(50, 100, 150, 200, 250, 300, 350, 400)
