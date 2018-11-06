@@ -38,12 +38,15 @@ plot(1:max(num.procs), type = 'n', ylim = ylim,
       xlab = '# of Processes', ylab = 'Speed Up')
 lines(amdahl_x, amdahl_y, col = 'red', lwd = 2)
 lines(num.procs, sp, col = 'green', lwd = 2)
+legend('bottomleft', legend = c('Theory', 'MPI Jacobi'), lwd = 2, col = c('red', 'green'))
 
 if (F) {
   png('amdahl.png', width = 7, height = 4, res = 300, units = 'in')
+  par(mar = c(3, 3, 1, 1))
   plot(1:max(num.procs), type = 'n', ylim = ylim,
        xlab = '# of Processes', ylab = 'Speed Up')
   lines(amdahl_x, amdahl_y, col = 'red', lwd = 2)
   lines(num.procs, sp, col = 'green', lwd = 2)
+  legend('bottomleft', legend = c('Theory', 'MPI Jacobi'), lwd = 2, col = c('red', 'green'))
   dev.off()
 }
