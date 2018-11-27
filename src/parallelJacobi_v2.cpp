@@ -14,7 +14,7 @@
 
 using namespace std;
 
-#define ERR {if(res!=NC_NOERR)printf("Error at line=%d: %s\n", __LINE__, nc_strerror(res));}
+#define ERR {if(res!=NC_NOERR) cout << "Error at line=" << __LINE__ << ": " << nc_strerror(res) << endl;}
 
 #define NDIMS 2
 #define DIMSIZE 24
@@ -22,6 +22,7 @@ using namespace std;
 int main(int argc, char **argv) {
 
     string nc_file = "/home/graduate/wuh20/github/LinearSystemSolvers/data/ncdf4/100.nc";
+    size_t start[NDIMS], count[NDIMS];
 
     // Initialize the MPI world
     int world_size = -1, world_rank = -1;
@@ -29,10 +30,24 @@ int main(int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
     // Read NetCDF file meta data
-    int ncid = -1, res = -1;
+    int ncid = -1, dimid = -1, res = -1;
     MPI_Info info;
-    res = nc_open_par(nc_file.c_str(), NC_MPIIO, MPI_INFO_NULL, &ncid); ERR;
-    
+    res = nc_open_par(nc_file.c_str(), NC_NOWRITE, MPI_COMM_WORLD, MPI_INFO_NULL, &ncid); ERR;
+
+    // Query size from the nc file
+    size_t size = 0;
+    res = nc_inq_dimid(ncid, "size", &dimid); ERR;
+    res = nc_inq_dimlen(ncid, dimid, &size); ERR;
+
+    // Define the rows to read for this process
+    start[0] = world_rank * size / world_size;
+    count[0] = world_rank == world_size - 1 ? size - (world_rank * size / world_size) : size / world_size;
+
+    // Always read the full colomns
+    start[1] = 0; count[1] = size;
+
+    res = nc_read
+
     res = nc_close(ncid); ERR;
     
 //
