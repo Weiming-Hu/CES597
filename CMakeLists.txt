@@ -79,6 +79,8 @@ foreach (PROGRAM_NAME IN LISTS PROGRAM_NAMES)
 endforeach(PROGRAM_NAME IN PROGRAM_NAMES)
 
 if (${USE_MPI})
+
+    # Build parallel Jacobi version 1
     add_definitions(-D_USE_MPI)
     message(STATUS "Build parallel Jacobi method with MPI")
     find_package(MPI REQUIRED)
@@ -98,6 +100,32 @@ if (${USE_MPI})
     endif (EXE_SUFFIX)
 
     add_dependencies(parallelJacobi Matrix)
+
+
+    # Build parallel Jacobi version 2
+    set(EXTRA_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${EXTRA_MODULE_PATH})
+    find_package(NetCDF)
+    if (${NETCDF_FOUND})
+        message(STATUS "NetCDF is found. Build parallel Jacobi version 2.")
+
+        include_directories(SYSTEM ${NETCDF_INCLUDES})
+        message(STATUS "NetCDF include dir: ${NETCDF_INCLUDES}")
+        message(STATUS "NetCDF link libraries: ${NETCDF_LIBRARIES}")
+
+        add_executable (parallelJacobi2 "${CMAKE_CURRENT_SOURCE_DIR}/src/parallelJacobi_v2.cpp")
+        target_link_libraries (parallelJacobi2 ${NETCDF_LIBRARIES} ${MPI_C_LIBRARIES} ${MPI_CXX_LIBRARIES})
+        set_target_properties(parallelJacobi2
+            PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${COMMON_OUTPUT_DIR}/bin")
+
+        if (EXE_SUFFIX)
+            set_target_properties(parallelJacobi2 PROPERTIES SUFFIX ${EXE_SUFFIX})
+        endif (EXE_SUFFIX)
+
+    else (${NETCDF_FOUND})
+        message(STATUS "NetCDF is not found. Parallel Jacobi version 2 is not built.")
+    endif (${NETCDF_FOUND})
+
 endif (${USE_MPI})
 
 message (STATUS "compile flags are ${CMAKE_CXX_FLAGS}")

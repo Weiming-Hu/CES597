@@ -14,9 +14,7 @@
 #include <ctime>
 
 #ifdef _OPENMP
-#ifdef _WALL_TIME
 #include <omp.h>
-#endif
 #endif
 
 
