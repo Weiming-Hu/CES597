@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     } else {
         if (world_rank == 0) {
             cout << "parallelJacobi_v2 <netcdf file> <max iteration> "
-                    << "<initialization> [verbose level, 0 or 1]" << endl;
+                    << "<initialization> [verbose level]" << endl;
         }
         return 0;
     }
@@ -183,7 +183,7 @@ int main(int argc, char **argv) {
                 return (lhs + abs(rhs));
             });
             
-            if (verbose) 
+            if (verbose >= 2)
                 cout << "Iteration # " << i_it + 1 << " residual: " << resid << endl;
 
             // Calculate the new solution
