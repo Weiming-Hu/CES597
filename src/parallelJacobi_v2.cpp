@@ -26,18 +26,25 @@ using namespace std;
 
 int main(int argc, char **argv) {
     
+    double wtime_start, wtime_end_of_preprocess, wtime_end_of_computation;
+
     // Initialize the MPI world
     int world_size = -1, world_rank = -1;
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
+#ifdef _PROFILE_TIME
+    if (world_rank == 0)
+        wtime_start = MPI_Wtime();
+#endif
+
     // Parse arguments
     string nc_file;
     double resid = 999;
     size_t start[NDIMS], count[NDIMS];
     int initialize_method = 1, max_it = 10,
-            master_rank = 0, opt = -1, verbose = 1;
+            master_rank = 0, opt = -1, verbose = 0;
     
     if (argc >= 4) {
         nc_file = argv[1];
@@ -78,6 +85,7 @@ int main(int argc, char **argv) {
         displs = new int[world_size]();
 
         for (size_t i = 0; i < world_size; i++) {
+
             recvcounts[i] = i == world_size - 1 ? size - (i * size / world_size) : size / world_size;
             displs[i] = i * size / world_size;
         }
@@ -146,6 +154,11 @@ int main(int argc, char **argv) {
         }
     }
 
+#ifdef _PROFILE_TIME
+    if (world_rank == 0)
+        wtime_end_of_preprocess = MPI_Wtime();
+#endif
+
     // Jacobi Method
     //
     // We have our serial system set up as x_k+1 = D^-1 * (b - R * x_k)
@@ -205,6 +218,22 @@ int main(int argc, char **argv) {
 
     delete [] pA, pb, px, ptmp, D_inv;
     if (world_rank == master_rank) delete [] pdeltax, px_correct, recvcounts, displs;
+
+#ifdef _PROFILE_TIME
+    if (world_rank == 0) {
+        wtime_end_of_computation = MPI_Wtime();
+
+        double wduration_total = wtime_end_of_computation - wtime_start;
+        double wduration_prep = wtime_end_of_preprocess - wtime_start;
+        double wduration_comp = wtime_end_of_computation - wtime_end_of_preprocess;
+
+        cout << "Preprocessing: " << wduration_prep << "s ("
+            << 100 * wduration_prep / wduration_total << "%)" << endl
+            << "Computation: " << wduration_comp << "s ("
+            << 100 * wduration_comp / wduration_total << "%)" << endl
+            << "Total time: " << wduration_total << "s (100%)" << endl;
+    }
+#endif
 
     // Housekeeping
     MPI_Finalize();
