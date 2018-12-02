@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 
     // Read NetCDF file meta data
     int ncid = -1, dimid = -1, varid = -1, res = -1;
-    res = nc_open_par(nc_file.c_str(), NC_NOWRITE, MPI_COMM_WORLD, MPI_INFO_NULL, &ncid); ERR;
+    res = nc_open_par(nc_file.c_str(), NC_MPIIO|NC_NOWRITE, MPI_COMM_WORLD, MPI_INFO_NULL, &ncid); ERR;
 
     // Query size from the nc file
     size_t size = 0;
