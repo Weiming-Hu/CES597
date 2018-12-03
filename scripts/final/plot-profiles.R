@@ -1,5 +1,6 @@
-cat("Set working directory to ~/github/LinearSystemSolvers/scripts/final\n")
-setwd('~/github/LinearSystemSolvers/scripts/final/')
+wd.folder <- '~/github/LinearSystemSolvers/scripts/final/profile2/'
+cat("Set working directory to", wd.folder, "\n")
+setwd(wd.folder)
 
 folders <- list.dirs(path = '.', full.names = T)[-1]
 
