@@ -1,3 +1,4 @@
+<<<<<<< HEAD:scripts/final/profile2/3/log-fix-np-prog.txt
 [1543816768.670697] [comp-sc-0237:30641:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
 [1543816768.672264] [comp-sc-0237:30641:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
 Preprocessing: 0.00658298s (99.4095%)
@@ -28,3 +29,29 @@ Total time: 13.9295s (100%)
 Preprocessing: 0.01792s (0.0123281%)
 Computation: 145.341s (99.9877%)
 Total time: 145.359s (100%)
+=======
+Preprocessing: 0.00861907s (99.4799%)
+Computation: 4.50611e-05s (0.520088%)
+Total time: 0.00866413s (100%)
+
+Preprocessing: 0.00798202s (32.5266%)
+Computation: 0.0165579s (67.4734%)
+Total time: 0.0245399s (100%)
+
+Preprocessing: 0.00767589s (4.78216%)
+Computation: 0.152835s (95.2178%)
+Total time: 0.160511s (100%)
+
+Preprocessing: 0.0085268s (0.45506%)
+Computation: 1.86525s (99.5449%)
+Total time: 1.87378s (100%)
+
+Preprocessing: 0.0122039s (0.0639889%)
+Computation: 19.0597s (99.936%)
+Total time: 19.0719s (100%)
+
+Preprocessing: 0.0214229s (0.0117589%)
+Computation: 182.163s (99.9882%)
+Total time: 182.185s (100%)
+
+>>>>>>> 0fda5c2a7152203c681fac313e5ef33d7dcdd501:scripts/final/3/log-fix-np-prog.txt

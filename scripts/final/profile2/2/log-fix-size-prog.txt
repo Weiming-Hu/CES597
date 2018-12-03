@@ -1,3 +1,4 @@
+<<<<<<< HEAD:scripts/final/profile2/2/log-fix-size-prog.txt
 [1543817063.584268] [comp-sc-0196:731  :0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
 [1543817063.585577] [comp-sc-0196:731  :0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
 The absolute error sum to the answer is 0.000499357.
@@ -826,3 +827,61 @@ The absolute error sum to the answer is 0.000499357.
 Preprocessing: 9.54926s (4.72918%)
 Computation: 192.373s (95.2708%)
 Total time: 201.922s (100%)
+=======
+Preprocessing: 0.051887s (0.472231%)
+Computation: 10.9358s (99.5278%)
+Total time: 10.9876s (100%)
+
+Preprocessing: 0.0411901s (0.679581%)
+Computation: 6.01992s (99.3204%)
+Total time: 6.06111s (100%)
+
+Preprocessing: 0.0621581s (2.53951%)
+Computation: 2.38549s (97.4605%)
+Total time: 2.44765s (100%)
+
+Preprocessing: 0.257108s (16.9785%)
+Computation: 1.25721s (83.0215%)
+Total time: 1.51431s (100%)
+
+Preprocessing: 1.0061s (59.0456%)
+Computation: 0.697836s (40.9544%)
+Total time: 1.70393s (100%)
+
+Preprocessing: 64.4077s (99.1492%)
+Computation: 0.552673s (0.850786%)
+Total time: 64.9603s (100%)
+
+Preprocessing: 2.49864s (66.5299%)
+Computation: 1.25703s (33.4701%)
+Total time: 3.75566s (100%)
+
+Preprocessing: 3.95917s (98.6024%)
+Computation: 0.056118s (1.39761%)
+Total time: 4.01529s (100%)
+
+Preprocessing: 4.71802s (90.0446%)
+Computation: 0.521628s (9.9554%)
+Total time: 5.23965s (100%)
+
+Preprocessing: 73.4179s (99.6491%)
+Computation: 0.258561s (0.350941%)
+Total time: 73.6765s (100%)
+
+Preprocessing: 4.4408s (98.1999%)
+Computation: 0.081403s (1.80007%)
+Total time: 4.5222s (100%)
+
+Preprocessing: 5.05205s (12.6812%)
+Computation: 34.7867s (87.3188%)
+Total time: 39.8388s (100%)
+
+Preprocessing: 69.9082s (96.8282%)
+Computation: 2.28996s (3.17178%)
+Total time: 72.1982s (100%)
+
+Preprocessing: 4.52752s (52.602%)
+Computation: 4.0796s (47.398%)
+Total time: 8.60712s (100%)
+
+>>>>>>> 0fda5c2a7152203c681fac313e5ef33d7dcdd501:scripts/final/3/log-fix-size-prog.txt
