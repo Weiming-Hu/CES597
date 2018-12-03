@@ -1,4 +1,3 @@
-wd.folder <- '~/github/LinearSystemSolvers/scripts/final/profile2/'
 cat("Set working directory to", wd.folder, "\n")
 setwd(wd.folder)
 
@@ -42,6 +41,8 @@ for (i in 1:length(folders)) {
   for (j in 1:nrow(fix.np.time)) {
     m <- gsub("real\t(.*?)m(.*?)s", "\\1", data[j * 4 - 3])
     s <- gsub("real\t(.*?)m(.*?)s", "\\2", data[j * 4 - 3])
+    # m <- gsub("user\t(.*?)m(.*?)s", "\\1", data[j * 4 - 2])
+    # s <- gsub("user\t(.*?)m(.*?)s", "\\2", data[j * 4 - 2])
     fix.np.time[j, i] <- as.numeric(m) * 60 + as.numeric(s)
   }
   
@@ -69,6 +70,8 @@ for (i in 1:length(folders)) {
   for (j in 1:nrow(fix.size.time)) {
     m <- gsub("real\t(.*?)m(.*?)s", "\\1", data[j * 4 - 3])
     s <- gsub("real\t(.*?)m(.*?)s", "\\2", data[j * 4 - 3])
+    # m <- gsub("user\t(.*?)m(.*?)s", "\\1", data[j * 4 - 2])
+    # s <- gsub("user\t(.*?)m(.*?)s", "\\2", data[j * 4 - 2])
     fix.size.time[j, i] <- as.numeric(m) * 60 + as.numeric(s)
   }
 }
@@ -78,4 +81,4 @@ fix.size.time <- t(fix.size.time)
 fix.np.prog <- t(fix.np.prog)
 fix.np.time <- t(fix.np.time)
 
-boxplot(fix.size.time)
+# boxplot(fix.size.time)

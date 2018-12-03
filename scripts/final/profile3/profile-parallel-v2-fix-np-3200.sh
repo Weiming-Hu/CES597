@@ -9,7 +9,7 @@ module load netcdf/4.4.1
 rm log-fix-np-prog.txt || true
 rm log-fix-np-time.txt || true
 
-cd /storage/home/w/wuh20/github/LinearSystemSolvers/scripts/final/profile2
+cd /storage/home/w/wuh20/github/LinearSystemSolvers/scripts/final/profile3
 { time mpirun -np 1 ../../../output/bin/parallelJacobi2 ../../../data/ncdf4/10.nc 90000 3 0   >> 1/log-fix-np-prog.txt ; } 2>> 1/log-fix-np-time.txt
 { time mpirun -np 1 ../../../output/bin/parallelJacobi2 ../../../data/ncdf4/100.nc 90000 3 0  >> 1/log-fix-np-prog.txt ; } 2>> 1/log-fix-np-time.txt
 { time mpirun -np 1 ../../../output/bin/parallelJacobi2 ../../../data/ncdf4/200.nc 90000 3 0  >> 1/log-fix-np-prog.txt ; } 2>> 1/log-fix-np-time.txt

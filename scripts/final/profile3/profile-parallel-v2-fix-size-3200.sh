@@ -9,7 +9,7 @@ module load netcdf/4.4.1
 #rm log-fix-size-prog.txt || true
 #rm log-fix-size-time.txt || true
 
-cd /storage/home/w/wuh20/github/LinearSystemSolvers/scripts/final/profile2
+cd /storage/home/w/wuh20/github/LinearSystemSolvers/scripts/final/profile3
 { time mpirun -np 1 ../../../output/bin/parallelJacobi2 ../../../data/ncdf4/3200.nc 9000000 3 1 >> 1/log-fix-size-prog.txt; } 2>> 1/log-fix-size-time.txt
 { time mpirun -np 2 ../../../output/bin/parallelJacobi2 ../../../data/ncdf4/3200.nc 9000000 3 1 >> 1/log-fix-size-prog.txt; } 2>> 1/log-fix-size-time.txt
 { time mpirun -np 4 ../../../output/bin/parallelJacobi2 ../../../data/ncdf4/3200.nc 9000000 3 1 >> 1/log-fix-size-prog.txt; } 2>> 1/log-fix-size-time.txt
