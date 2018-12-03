@@ -1,30 +1,24 @@
-[1543816605.309348] [comp-sc-0237:29317:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
-[1543816605.310859] [comp-sc-0237:29317:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
 Preprocessing: 0.00648284s (99.3387%)
 Computation: 4.31538e-05s (0.66126%)
 Total time: 0.00652599s (100%)
-[1543816605.757053] [comp-sc-0237:29328:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
-[1543816605.758523] [comp-sc-0237:29328:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+
 Preprocessing: 0.00714993s (30.4875%)
 Computation: 0.0163021s (69.5125%)
 Total time: 0.023452s (100%)
-[1543816606.220604] [comp-sc-0237:29337:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
-[1543816606.222200] [comp-sc-0237:29337:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+
 Preprocessing: 0.00672317s (4.43112%)
 Computation: 0.145003s (95.5689%)
 Total time: 0.151726s (100%)
-[1543816606.812370] [comp-sc-0237:29346:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
-[1543816606.813838] [comp-sc-0237:29346:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+
 Preprocessing: 0.00703001s (0.544106%)
 Computation: 1.285s (99.4559%)
 Total time: 1.29203s (100%)
-[1543816608.549332] [comp-sc-0237:29355:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
-[1543816608.550873] [comp-sc-0237:29355:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+
 Preprocessing: 0.0103061s (0.0745702%)
 Computation: 13.8104s (99.9254%)
 Total time: 13.8207s (100%)
-[1543816622.814368] [comp-sc-0237:29376:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
-[1543816622.815882] [comp-sc-0237:29376:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+
 Preprocessing: 0.018959s (0.0130374%)
 Computation: 145.402s (99.987%)
 Total time: 145.421s (100%)
+
