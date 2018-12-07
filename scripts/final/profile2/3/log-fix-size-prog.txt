@@ -1,0 +1,56 @@
+Preprocessing: 0.014761s (0.0157703%)
+Computation: 93.5853s (99.9842%)
+Total time: 93.6001s (100%)
+
+Preprocessing: 0.0487761s (0.0851745%)
+Computation: 57.2173s (99.9148%)
+Total time: 57.2661s (100%)
+
+Preprocessing: 0.084214s (0.29725%)
+Computation: 28.2468s (99.7027%)
+Total time: 28.331s (100%)
+
+Preprocessing: 0.456733s (3.51208%)
+Computation: 12.5479s (96.4879%)
+Total time: 13.0046s (100%)
+
+Preprocessing: 1.77785s (23.0701%)
+Computation: 5.92844s (76.9299%)
+Total time: 7.70629s (100%)
+
+Preprocessing: 4.64341s (48.2798%)
+Computation: 4.97429s (51.7202%)
+Total time: 9.6177s (100%)
+
+Preprocessing: 4.52761s (90.3951%)
+Computation: 0.481078s (9.60488%)
+Total time: 5.00868s (100%)
+
+Preprocessing: 4.96795s (77.3288%)
+Computation: 1.4565s (22.6712%)
+Total time: 6.42446s (100%)
+
+Preprocessing: 4.46182s (57.1192%)
+Computation: 3.3496s (42.8808%)
+Total time: 7.81142s (100%)
+
+Preprocessing: 4.43044s (79.3255%)
+Computation: 1.1547s (20.6745%)
+Total time: 5.58514s (100%)
+
+Preprocessing: 4.56241s (35.1798%)
+Computation: 8.40641s (64.8202%)
+Total time: 12.9688s (100%)
+
+Preprocessing: 7.69918s (9.43168%)
+Computation: 73.9319s (90.5683%)
+Total time: 81.6311s (100%)
+
+Preprocessing: 4.74448s (16.4759%)
+Computation: 24.0519s (83.5241%)
+Total time: 28.7964s (100%)
+
+Preprocessing: 8.87745s (4.79773%)
+Computation: 176.157s (95.2023%)
+Total time: 185.034s (100%)
+

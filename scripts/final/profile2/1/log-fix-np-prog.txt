@@ -1,0 +1,24 @@
+Preprocessing: 0.021529s (99.8044%)
+Computation: 4.22001e-05s (0.195632%)
+Total time: 0.0215712s (100%)
+
+Preprocessing: 0.0393231s (71.6605%)
+Computation: 0.0155511s (28.3395%)
+Total time: 0.0548742s (100%)
+
+Preprocessing: 0.037632s (20.7047%)
+Computation: 0.144124s (79.2953%)
+Total time: 0.181756s (100%)
+
+Preprocessing: 0.067302s (4.98058%)
+Computation: 1.28398s (95.0194%)
+Total time: 1.35129s (100%)
+
+Preprocessing: 0.115586s (0.801631%)
+Computation: 14.3033s (99.1984%)
+Total time: 14.4189s (100%)
+
+Preprocessing: 0.22679s (0.155658%)
+Computation: 145.471s (99.8443%)
+Total time: 145.697s (100%)
+
